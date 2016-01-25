@@ -36,6 +36,7 @@ class UserTableSeeder extends Seeder {
         	'name' => 'John Doe',
         	'email' => 'user@foobar.com',
         	'password' => bcrypt('password'),
+            'phone' => '(+30)6932451840',
         	'photo' => null
       	]);
     }
@@ -49,9 +50,9 @@ class MastoriTableSeeder extends Seeder {
         DB::table('mastoria')->delete();
 
         Mastori::create([
-        		'username' => 'mastorrrr',
-        	  'email' => '',
-        	  'password' => bcrypt('password'),
+    		'username' => 'mastorrrr',
+            'email' => '',
+            'password' => bcrypt('password'),
             'first_name' => 'Σταθης',
             'last_name' => 'Doe',
             'paratsoukli' => 'κυρ Στάθης',
