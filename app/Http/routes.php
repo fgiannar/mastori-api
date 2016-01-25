@@ -26,6 +26,8 @@ Route::get('/', function () {
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
-    //
+Route::group(['middleware' => ['api']], function () {
+    // Mastori
+	Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show', 'store', 'update']]);
+
 });

@@ -19,13 +19,13 @@ class Address extends Model {
    *
    * @var array
    */
-  protected $fillable = ['friendly_name', 'lat', 'lng', 'address', 'city', 'country', 'user_id', 'mastori_id'];
+  protected $fillable = ['friendly_name', 'lat', 'lng', 'address', 'city', 'country'];
 
   /**
    * The attributes excluded from the model's JSON form.
    *
    * @var array
    */
-  protected $hidden = ['password', 'remember_token'];
+  protected $hidden = ['user_id', 'mastori_id', 'id'];
 
 }

@@ -27,4 +27,12 @@ class Mastori extends Authenticatable
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+    * Get the addresses of the mastori.
+    */
+    public function addresses()
+    {
+      return $this->hasMany('App\Address');
+    }
+
 }

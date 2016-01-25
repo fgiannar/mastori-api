@@ -18,7 +18,7 @@ class CreateMastoriaTable extends Migration
             $table->string('last_name');
             $table->string('first_name');
             $table->string('phone');
-            $table->string('email')->unique()->nullable();
+            $table->string('email')->nullable();
             $table->string('password', 60);
             $table->longText('description')->nullable();
             $table->longText('pricelist');
