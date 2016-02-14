@@ -27,7 +27,13 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['api']], function () {
-    // Mastori
-	Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show', 'store', 'update']]);
 
+	Route::post('auth/mastori', 'Auth\AuthenticateMastoriController@index');
+	Route::post('auth/user', 'Auth\AuthenticateUserController@index');
+
+	Route::group(['middleware' => ['auth:api-mastoria'/*, 'jwt.refresh'*/]], function()
+  {
+    // Mastori
+		Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show', 'store', 'update']]);
+	});
 });

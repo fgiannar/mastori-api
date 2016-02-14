@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        // 'guard' => 'api-users',
+        // 'passwords' => 'users',
     ],
 
     /*
@@ -36,14 +36,15 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
+
+        'api-users' => [
+            'driver' => 'jwt-auth',
             'provider' => 'users',
         ],
 
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
+        'api-mastoria' => [
+            'driver' => 'jwt-auth',
+            'provider' => 'mastoria',
         ],
     ],
 
@@ -70,10 +71,10 @@ return [
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'mastoria' => [
+            'driver' => 'database',
+            'table' => 'mastoria',
+        ],
     ],
 
     /*
@@ -100,6 +101,12 @@ return [
             'provider' => 'users',
             'email' => 'auth.emails.password',
             'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'mastoria' => [
+            'provider' => 'mastoria',
+            'email' => 'auth.emails.password',
+            'table' => 'password_resets_mastoria',
             'expire' => 60,
         ],
     ],
