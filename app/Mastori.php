@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Rating;
 
 class Mastori extends Authenticatable
 {
@@ -25,7 +26,7 @@ class Mastori extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'pivot'];
 
     /**
     * Get the addresses of the mastori.
@@ -33,6 +34,33 @@ class Mastori extends Authenticatable
     public function addresses()
     {
       return $this->hasMany('App\Address');
+    }
+
+    /**
+    * Get the ratings of the mastori.
+    */
+    public function ratings()
+    {
+      return $this->hasMany('App\Rating');
+    }
+
+    /**
+    * Get the professions of the mastori.
+    */
+    public function professions()
+    {
+        return $this->belongsToMany('App\Profession', 'mastoria_professions');
+    }
+
+    /**
+    * Override method to return average rating
+    */
+    public function toArray()
+    {
+        $array = parent::toArray();
+        $array['rating'] = $this->ratings()->avg('rating');
+
+        return $array;
     }
 
 }

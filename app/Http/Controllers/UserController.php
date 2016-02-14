@@ -8,9 +8,9 @@ use Validator;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Mastori;
+use App\User;
 
-class MastoriController extends Controller
+class UserController extends Controller
 {
     // TODO Add middleware for checking permissions after auth implementation
 
@@ -21,8 +21,8 @@ class MastoriController extends Controller
      */
     public function index()
     {
-         // TODO Add filters, pagination and return only active mastoria if NOT admin
-        return Mastori::all();
+         // TODO Add filters, pagination and return only active usera if NOT admin
+        return User::with('addresses')->get();
     }
 
     /**
@@ -41,19 +41,19 @@ class MastoriController extends Controller
         }
 
         // store
-        $mastori = new Mastori;
+        $user = new User;
         $addresses = $data['addresses'];
         $data = array_except($data, ['password_repeat', 'addresses']);
         // Encrypt password
         $data['password'] = bcrypt($data['password']);
 
-        $newMastori = $mastori->create($data);
+        $newUser = $user->create($data);
         // Insert related addresses
         foreach ($addresses as $address) {
-            $newMastori->addresses()->create($address);
+            $newUser->addresses()->create($address);
         }
 
-        return response($newMastori->load('addresses'), 201);
+        return response($newUser->load('addresses'), 201);
     }
 
     /**
@@ -64,8 +64,8 @@ class MastoriController extends Controller
      */
     public function show($id)
     {
-        // TODO Add check if mastori is active if NOT admin
-        return Mastori::with('addresses')->find($id);
+        // TODO Add check if user is active if NOT admin
+        return User::with('addresses')->find($id);
     }
 
     /**
@@ -85,27 +85,23 @@ class MastoriController extends Controller
         }
 
         // store
-        $mastori = Mastori::find($id);
+        $user = User::find($id);
         $addresses = $data['addresses'];
-        $professions = array_pluck($data['professions'], 'id');
-
-        $data = array_except($data, ['password_repeat', 'addresses', 'professsions']);
+        $data = array_except($data, ['password_repeat', 'addresses']);
         // Encrypt password
         if (isset($data['password'])) {
             $data['password'] = bcrypt($data['password']);
         }
 
-        $mastori->update($data);
+        $user->update($data);
 
         // Insert related addresses
-        $mastori->addresses()->delete();
+        $user->addresses()->delete();
         foreach ($addresses as $address) {
-            $mastori->addresses()->create($address);
+            $user->addresses()->create($address);
         }
-        // Sync professions
-        $mastori->professions()->sync($professions);
 
-        return $mastori->load('addresses')->load('professions');
+        return $user->load('addresses');
     }
 
     /**
@@ -120,7 +116,7 @@ class MastoriController extends Controller
     }
 
     /**
-     * Get a validator for a mastori create/update request.
+     * Get a validator for a user create/update request.
      *
      * @param  array  $data
      * @param  int  $id
@@ -130,25 +126,19 @@ class MastoriController extends Controller
     {
         $password_required = $id == 0 ? 'required' : '';
         return Validator::make($data, [
-            'username' => 'required|max:255|unique:mastoria,username,' . $id,
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'paratsoukli' => 'max:255',
-            'pricelist' => 'required',
+            'email' => 'required|max:255|unique:users,email,' . $id,
+            'name' => 'required|max:255',
             'photo' => 'image',
             'phone' => 'required|max:255',
             'password' => $password_required.'|max:255|min:6',
             'password_repeat' => $password_required.'|same:password|max:255',
-            'email' => 'email|max:255',
-            'addresses' => 'required|array|min:1',
+            'addresses' => 'required|array',
             'addresses.*.lat' => 'required|numeric',
             'addresses.*.lng' => 'required|numeric',
             'addresses.*.address' => 'required|max:255',
             'addresses.*.friendly_name' => 'max:255',
             'addresses.*.city' => 'required|max:255',
-            'addresses.*.country' => 'required|max:255',
-            'professions' => 'required|array|min:1',
-            'professions.*.id'  => 'required|exists:professions,id'
+            'addresses.*.country' => 'required|max:255'
         ]);
     }
 }
