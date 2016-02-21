@@ -13,6 +13,8 @@ use Carbon\Carbon;
 use App\Rating;
 use App\Mastori;
 
+use Auth;
+
 class RatingController extends Controller
 {
     // TODO Add middleware for checking permissions after auth implementation
@@ -36,6 +38,8 @@ class RatingController extends Controller
      */
     public function store(Request $request, $mastori_id)
     {
+        $mastori = Mastori::findOrFail($mastori_id);
+
         $data = $request->all();
 
         $validator = $this->validator($data);
@@ -44,14 +48,16 @@ class RatingController extends Controller
         }
 
         // store
-        $mastori = Mastori::findOrFail($mastori_id);
-
-        $data['user_id'] = 1; // TODO: Change this when auth is implemented
+        $data['end_user_id'] = Auth::user()->userable->id;
         $data['editing_expires_at'] = date('Y-m-d H:i:s', strtotime('+5 minutes'));
 
-        $asdf = $mastori->ratings()->create($data);
+        $rating = $mastori->ratings()->create($data);
 
-        return response($asdf, 201);
+        // Update mastori average rating
+        $mastori['avg_rating'] = $mastori->ratings()->avg('rating');
+        $mastori->save();
+
+        return response($rating, 201);
     }
 
     /**
@@ -64,9 +70,15 @@ class RatingController extends Controller
     public function update(Request $request, $id)
     {
         $rating = Rating::findOrFail($id);
+
+        if ($rating['end_user_id'] !== Auth::user()->userable->id) {
+            return response('Unauthorized', 401);
+        }
+
         if ($rating['editing_expires_at'] < Carbon::now()) {
             return response('Rating editing expired', 401);
         }
+
         $data = $request->all();
 
         $validator = $this->validator($data);
@@ -76,6 +88,11 @@ class RatingController extends Controller
 
         // store
         $rating->update($data);
+
+        // Update mastori average rating
+        $mastori = Mastori::find($rating['mastori_id']);
+        $mastori['avg_rating'] = $mastori->ratings()->avg('rating');
+        $mastori->save();
 
         return $rating;
     }

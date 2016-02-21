@@ -22,8 +22,6 @@ class CreateAddressesTable extends Migration
             $table->string('country');
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('mastori_id')->unsigned()->nullable();
-            $table->foreign('mastori_id')->references('id')->on('mastoria')->onDelete('cascade');
             $table->timestamps();
         });
     }

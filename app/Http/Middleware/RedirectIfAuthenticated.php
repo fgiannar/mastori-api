@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
+use JWTAuth;
 
 class RedirectIfAuthenticated
 {
@@ -15,12 +15,13 @@ class RedirectIfAuthenticated
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/');
+        if (!JWTAuth::getToken()) {
+            return $next($request);
         }
 
-        return $next($request);
+
+        return response('Uanuthorized. Allowed only not authenticated users.', 401);
     }
 }

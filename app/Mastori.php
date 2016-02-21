@@ -2,10 +2,10 @@
 
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use App\Rating;
 
-class Mastori extends Authenticatable
+class Mastori extends Model
 {
     /**
      * The database table used by the model.
@@ -19,21 +19,12 @@ class Mastori extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['username', 'first_name', 'last_name', 'paratsoukli', 'email', 'password', 'description', 'pricelist', 'photo', 'phone'];
+    protected $fillable = ['first_name', 'last_name', 'paratsoukli', 'description', 'pricelist', 'photo', 'phone'];
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = ['password', 'remember_token', 'pivot'];
 
-    /**
-    * Get the addresses of the mastori.
-    */
-    public function addresses()
+    public function user()
     {
-      return $this->hasMany('App\Address');
+        return $this->morphOne('App\User', 'userable');
     }
 
     /**
@@ -53,12 +44,21 @@ class Mastori extends Authenticatable
     }
 
     /**
-    * Override method to return average rating
+    * Override toArray function
+    * @return mastori with relations, user data and average rating
     */
     public function toArray()
     {
         $array = parent::toArray();
-        $array['rating'] = $this->ratings()->avg('rating');
+
+        if (isset($array['user'])) {
+            $array['username'] = $this->user->username;
+            $array['email'] = $this->user->email;
+            $array['facebook_id'] = $this->user->facebook_id;
+            $array['addresses'] = $this->user->addresses;
+
+            unset($array['user']);
+        }
 
         return $array;
     }

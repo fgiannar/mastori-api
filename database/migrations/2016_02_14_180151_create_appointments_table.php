@@ -19,8 +19,8 @@ class CreateAppointmentsTable extends Migration
             $table->dateTime('deadline');
             $table->longText('additional_comments');
             $table->enum('status', ['pending', 'approved', 'cancelled'])->default('pending');
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('end_user_id')->unsigned()->nullable();
+            $table->foreign('end_user_id')->references('id')->on('end_users');
             $table->integer('mastori_id')->unsigned()->nullable();
             $table->foreign('mastori_id')->references('id')->on('mastoria');
             $table->integer('address_id')->unsigned()->nullable();

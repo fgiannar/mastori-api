@@ -19,7 +19,7 @@ class Appointment extends Model {
    *
    * @var array
    */
-  protected $fillable = ['user_id', 'mastori_id', 'address_id', 'issue', 'available_datetimes', 'deadline', 'additional_comments'];
+  protected $fillable = ['end_user_id', 'mastori_id', 'address_id', 'issue', 'available_datetimes', 'deadline', 'additional_comments'];
 
   /**
    * The attributes that are NOT mass assignable.
@@ -33,7 +33,7 @@ class Appointment extends Model {
    *
    * @var array
    */
-  protected $hidden = ['user_id', 'mastori_id', 'response_time', 'address_id'];
+  protected $hidden = ['end_user_id', 'mastori_id', 'response_time', 'address_id'];
 
   /**
      * The attributes that should be casted to native types.
@@ -57,7 +57,7 @@ class Appointment extends Model {
     */
   public function user()
   {
-    $user = $this->belongsTo('App\User');
+    $user = $this->belongsTo('App\EndUser', 'end_user_id');
 
     return $this->status == 'approved' ? $user->select(array('id', 'name', 'phone')) : $user->select(array('id', 'name'));
   }

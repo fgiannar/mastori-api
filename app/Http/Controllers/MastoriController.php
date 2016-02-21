@@ -9,11 +9,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Mastori;
+use App\User;
 
 class MastoriController extends Controller
 {
     // TODO Add middleware for checking permissions after auth implementation
-
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +22,7 @@ class MastoriController extends Controller
     public function index()
     {
          // TODO Add filters, pagination and return only active mastoria if NOT admin
-        return Mastori::all();
+        return Mastori::with('user')->with('professions')->get();
     }
 
     /**
@@ -42,18 +42,30 @@ class MastoriController extends Controller
 
         // store
         $mastori = new Mastori;
-        $addresses = $data['addresses'];
-        $data = array_except($data, ['password_repeat', 'addresses']);
-        // Encrypt password
-        $data['password'] = bcrypt($data['password']);
+        $user = new User;
 
-        $newMastori = $mastori->create($data);
+        $addresses = $data['addresses'];
+        $professions = array_pluck($data['professions'], 'id');
+        $data = array_except($data, ['password_repeat', 'addresses', 'professions']);
+        $userdata = array_only($data, ['email', 'username', 'password']);
+        $mastoridata = array_except($data, ['email', 'username', 'password']);
+
+        // Encrypt password
+        $userdata['password'] = bcrypt($data['password']);
+
+        $newMastori = $mastori->create($mastoridata);
+        $newUser = $user->create($userdata);
+
         // Insert related addresses
         foreach ($addresses as $address) {
-            $newMastori->addresses()->create($address);
+            $newUser->addresses()->create($address);
         }
+        $newMastori->user()->save($newUser);
 
-        return response($newMastori->load('addresses'), 201);
+        // Sync professions
+        $newMastori->professions()->sync($professions);
+
+        return response($newMastori->load('user')->load('professions'), 201);
     }
 
     /**
@@ -65,7 +77,7 @@ class MastoriController extends Controller
     public function show($id)
     {
         // TODO Add check if mastori is active if NOT admin
-        return Mastori::with('addresses')->find($id);
+        return Mastori::findOrFail($id)->load('user');
     }
 
     /**
@@ -77,35 +89,43 @@ class MastoriController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $mastori = Mastori::findOrFail($id);
+
+        if ($mastori->id !== Auth::user()->userable->id) {
+            return response('Unauthorised', 401);
+        }
+
         $data = $request->all();
 
-        $validator = $this->validator($data, $id);
+        $validator = $this->validator($data, $mastori->user->id);
         if ($validator->fails()) {
             return response(['errors' => $validator->messages()], 400);
         }
 
-        // store
-        $mastori = Mastori::find($id);
         $addresses = $data['addresses'];
         $professions = array_pluck($data['professions'], 'id');
+        $data = array_except($data, ['password_repeat', 'addresses', 'professions']);
+        $userdata = array_only($data, ['email', 'username', 'password']);
+        $mastoridata = array_except($data, ['email', 'username', 'password']);
 
         $data = array_except($data, ['password_repeat', 'addresses', 'professsions']);
         // Encrypt password
-        if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
+        if (isset($userdata['password'])) {
+            $userdata['password'] = bcrypt($userdata['password']);
         }
-
-        $mastori->update($data);
+         // store
+        $mastori->update($mastoridata);
+        $mastori->user()->update($userdata);
 
         // Insert related addresses
-        $mastori->addresses()->delete();
+        $mastori->user->addresses()->delete();
         foreach ($addresses as $address) {
-            $mastori->addresses()->create($address);
+            $mastori->user->addresses()->create($address);
         }
         // Sync professions
         $mastori->professions()->sync($professions);
 
-        return $mastori->load('addresses')->load('professions');
+        return $mastori->load('professions');
     }
 
     /**
@@ -126,11 +146,11 @@ class MastoriController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data, $id = 0)
+    protected function validator(array $data, $user_id = 0)
     {
-        $password_required = $id == 0 ? 'required' : '';
+        $password_required = $user_id == 0 ? 'required' : '';
         return Validator::make($data, [
-            'username' => 'required|max:255|unique:mastoria,username,' . $id,
+            'username' => 'required_without:email|max:255|unique:users,username,' . $user_id,
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
             'paratsoukli' => 'max:255',
@@ -139,15 +159,15 @@ class MastoriController extends Controller
             'phone' => 'required|max:255',
             'password' => $password_required.'|max:255|min:6',
             'password_repeat' => $password_required.'|same:password|max:255',
-            'email' => 'email|max:255',
-            'addresses' => 'required|array|min:1',
+            'email' => 'required_without:username|email|max:255|unique:users,email,' . $user_id,
+            'addresses' => 'required|array|min:1|max:10',
             'addresses.*.lat' => 'required|numeric',
             'addresses.*.lng' => 'required|numeric',
             'addresses.*.address' => 'required|max:255',
             'addresses.*.friendly_name' => 'max:255',
             'addresses.*.city' => 'required|max:255',
             'addresses.*.country' => 'required|max:255',
-            'professions' => 'required|array|min:1',
+            'professions' => 'required|array|min:1|max:5',
             'professions.*.id'  => 'required|exists:professions,id'
         ]);
     }

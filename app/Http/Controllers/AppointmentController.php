@@ -11,10 +11,10 @@ use App\Http\Controllers\Controller;
 use App\Appointment;
 use App\Address;
 
+use Auth;
+
 class AppointmentController extends Controller
 {
-    // TODO Add middleware for checking permissions after auth implementation
-
     /**
      * Display a listing of the resource.
      *
@@ -46,6 +46,7 @@ class AppointmentController extends Controller
         $newAddress = new Address();
         $address =  $newAddress->create(array_except($oldAddress->toArray(), ['id']));
         $data = array_except($data, ['address_id']);
+        $data['end_user_id'] = Auth::user()->userable->id;
         // store
         $appointment = new Appointment;
         $newAppointment = $appointment->create($data);
@@ -64,7 +65,7 @@ class AppointmentController extends Controller
      */
     public function show($id)
     {
-        return Appointment::with('address')->find($id);
+        return Appointment::with('address')->with('user')->with('mastori')->findOrFail($id);
     }
 
     /**
@@ -77,6 +78,11 @@ class AppointmentController extends Controller
     public function arrange(Request $request, $id)
     {
         $appointment = Appointment::findOrFail($id);
+
+        if ($appointment->mastori->id !== Auth::user()->userable->id) {
+            return response('Unauthorised', 401);
+        }
+
         if ($appointment['status'] !== 'pending') {
             return response('Appointment has already been ' . $appointment['status'], 401);
         }
@@ -122,7 +128,7 @@ class AppointmentController extends Controller
             'available_datetimes' => 'required|array',
             'deadline' => 'required|date',
             'issue' => 'required',
-            'address_id' => 'required|exists:addresses,id',
+            'address_id' => 'required|exists:addresses,id,user_id,' . Auth::user()->id,
             'mastori_id' => 'required|exists:mastoria,id'
         ]);
     }

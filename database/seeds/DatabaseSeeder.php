@@ -4,8 +4,10 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
 use App\User;
+use App\EndUser;
 use App\Mastori;
 use App\Address;
+use App\Profession;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,27 +20,28 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call(UserTableSeeder::class);
+        $this->call(EndUserTableSeeder::class);
         $this->call(MastoriTableSeeder::class);
+        $this->call(UserTableSeeder::class);
         $this->call(AddressTableSeeder::class);
+        $this->call(ProfessionTableSeeder::class);
 
         Model::reguard();
     }
 }
 
-class UserTableSeeder extends Seeder {
+class EndUserTableSeeder extends Seeder {
 
     public function run()
     {
-        DB::table('users')->delete();
+        DB::table('end_users')->delete();
 
-        User::create([
-        	'name' => 'John Doe',
-        	'email' => 'user@foobar.com',
-        	'password' => bcrypt('password'),
+        EndUser::create([
+            'id' => 1,
+            'name' => 'John Doe',
             'phone' => '(+30)6932451840',
-        	'photo' => null
-      	]);
+            'photo' => null
+        ]);
     }
 
 }
@@ -50,9 +53,7 @@ class MastoriTableSeeder extends Seeder {
         DB::table('mastoria')->delete();
 
         Mastori::create([
-    		'username' => 'mastorrrr',
-            'email' => '',
-            'password' => bcrypt('password'),
+            'id' => 1,
             'first_name' => 'Σταθης',
             'last_name' => 'Doe',
             'paratsoukli' => 'κυρ Στάθης',
@@ -67,6 +68,32 @@ class MastoriTableSeeder extends Seeder {
 
 }
 
+class UserTableSeeder extends Seeder {
+
+    public function run()
+    {
+        DB::table('users')->delete();
+
+        User::create([
+            'userable_id' => '1',
+            'userable_type' => 'App\EndUser',
+        	'username' => 'user',
+        	'email' => 'user@foobar.com',
+        	'password' => bcrypt('password')
+      	]);
+
+        User::create([
+            'userable_id' => '1',
+            'userable_type' => 'App\Mastori',
+            'username' => 'mastorr',
+            'email' => 'mastorr@foobar.com',
+            'password' => bcrypt('password')
+        ]);
+    }
+
+}
+
+
 class AddressTableSeeder extends Seeder {
 
     public function run()
@@ -74,49 +101,58 @@ class AddressTableSeeder extends Seeder {
         DB::table('addresses')->delete();
 
         Address::create([
-        		'user_id' => 1,
-        		'city' => 'Thessaloniki',
-        		'country' => 'Greece',
-        		'address' => 'Armenopoulou 25',
-        		'mastori_id' => null,
+    		'user_id' => 1,
+    		'city' => 'Thessaloniki',
+    		'country' => 'Greece',
+    		'address' => 'Armenopoulou 25',
             'friendly_name' => 'Home',
             'lat' => 40.626469288832304,
             'lng' => 22.948430559277313
         ]);
 
         Address::create([
-        		'user_id' => 1,
-        		'city' => 'Thessaloniki',
-        		'country' => 'Greece',
-        		'address' => 'Karamanlh 25',
+    		'user_id' => 1,
+    		'city' => 'Thessaloniki',
+    		'country' => 'Greece',
+    		'address' => 'Karamanlh 25',
             'friendly_name' => 'Home',
-            'mastori_id' => null,
             'lat' => 40.626469288832304,
             'lng' => 22.948430559277313
         ]);
 
         Address::create([
-        		'user_id' => null,
-        		'city' => 'Thessaloniki',
-        		'country' => 'Greece',
-        		'address' => 'Gounari 25',
+    		'user_id' => 2,
+    		'city' => 'Thessaloniki',
+    		'country' => 'Greece',
+    		'address' => 'Gounari 25',
             'friendly_name' => '',
-            'mastori_id' => 1,
             'lat' => 40.626469288832304,
             'lng' => 22.948430559277313
         ]);
 
         Address::create([
-        		'user_id' => null,
-        		'city' => 'Thessaloniki',
-        		'country' => 'Greece',
-        		'address' => 'Armenopoulou 30',
+    		'user_id' => 2,
+    		'city' => 'Thessaloniki',
+    		'country' => 'Greece',
+    		'address' => 'Armenopoulou 30',
             'friendly_name' => '',
-            'mastori_id' => 1,
             'lat' => 40.6321039178281,
             'lng' => 22.951563379406707
         ]);
 
     }
 
+}
+
+class ProfessionTableSeeder extends Seeder {
+
+    public function run()
+    {
+        DB::table('professions')->delete();
+
+        Profession::create([
+            'tag' => 'ilektrologos',
+            'title' => 'Hlektrologos'
+        ]);
+    }
 }

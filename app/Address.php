@@ -25,6 +25,6 @@ class Address extends Model {
    *
    * @var array
    */
-  protected $hidden = ['user_id', 'mastori_id', 'id'];
+  protected $hidden = ['user_id', 'id'];
 
 }

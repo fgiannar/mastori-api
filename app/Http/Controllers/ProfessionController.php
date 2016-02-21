@@ -12,7 +12,11 @@ use App\Profession;
 
 class ProfessionController extends Controller
 {
-    // TODO Add middleware for checking permissions after auth implementation, ADMIN only
+    // TODO Add middleware again after testing period
+    public function __construct()
+    {
+        // $this->middleware('roles:admin');
+    }
 
     /**
      * Display a listing of the resource.

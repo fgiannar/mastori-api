@@ -19,7 +19,7 @@ class Rating extends Model {
    *
    * @var array
    */
-  protected $fillable = ['user_id', 'mastori_id', 'body', 'rating', 'editing_expires_at', 'status'];
+  protected $fillable = ['end_user_id', 'mastori_id', 'body', 'rating', 'editing_expires_at', 'status'];
 
   // protected $guarded = ['editing_expires_at', 'status', 'user_id', 'mastori_id'];
   /**
@@ -27,7 +27,7 @@ class Rating extends Model {
    *
    * @var array
    */
-  protected $hidden = ['user_id', 'mastori_id'];
+  protected $hidden = ['end_user_id', 'mastori_id'];
 
   /**
     * Get the mastori of the rating.
@@ -42,7 +42,7 @@ class Rating extends Model {
     */
   public function user()
   {
-    return $this->belongsTo('App\User')->select(array('id', 'name'));
+    return $this->belongsTo('App\EndUser', 'end_user_id')->select(array('id', 'name'));
   }
 
 }

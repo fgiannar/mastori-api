@@ -18,9 +18,9 @@ class CreateRatingsTable extends Migration
             $table->dateTime('editing_expires_at');
             $table->longText('body');
             $table->enum('status', ['pending', 'approved', 'cancelled'])->default('pending');
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('mastori_id')->unsigned()->nullable();
+            $table->integer('end_user_id')->unsigned();
+            $table->foreign('end_user_id')->references('id')->on('end_users')->onDelete('cascade');
+            $table->integer('mastori_id')->unsigned();
             $table->foreign('mastori_id')->references('id')->on('mastoria')->onDelete('cascade');
             $table->timestamps();
         });

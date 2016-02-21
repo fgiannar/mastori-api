@@ -8,12 +8,13 @@ use Validator;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\EndUser;
 use App\User;
 
-class UserController extends Controller
-{
-    // TODO Add middleware for checking permissions after auth implementation
+use Auth;
 
+class EndUserController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +23,7 @@ class UserController extends Controller
     public function index()
     {
          // TODO Add filters, pagination and return only active usera if NOT admin
-        return User::with('addresses')->get();
+        return EndUser::with('user')->get();
     }
 
     /**
@@ -41,19 +42,26 @@ class UserController extends Controller
         }
 
         // store
+        $endUser = new EndUser;
         $user = new User;
         $addresses = $data['addresses'];
         $data = array_except($data, ['password_repeat', 'addresses']);
-        // Encrypt password
-        $data['password'] = bcrypt($data['password']);
+        $userdata = array_only($data, ['email', 'username', 'password']);
+        $enduserdata = array_except($data, ['email', 'username', 'password']);
 
-        $newUser = $user->create($data);
+        // Encrypt password
+        $userdata['password'] = bcrypt($data['password']);
+
+        $newEndUser = $endUser->create($enduserdata);
+        $newUser = $user->create($userdata);
+
         // Insert related addresses
         foreach ($addresses as $address) {
             $newUser->addresses()->create($address);
         }
+        $newEndUser->user()->save($newUser);
 
-        return response($newUser->load('addresses'), 201);
+        return response($newEndUser->load('user'), 201);
     }
 
     /**
@@ -65,7 +73,7 @@ class UserController extends Controller
     public function show($id)
     {
         // TODO Add check if user is active if NOT admin
-        return User::with('addresses')->find($id);
+        return EndUser::findOrFail($id)->load('user');
     }
 
     /**
@@ -77,31 +85,40 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $endUser = EndUser::findOrFail($id);
+
+        if ($endUser->id !== Auth::user()->userable->id) {
+            return response('Unauthorised', 401);
+        }
+
         $data = $request->all();
 
-        $validator = $this->validator($data, $id);
+        $validator = $this->validator($data, $endUser->user->id);
         if ($validator->fails()) {
             return response(['errors' => $validator->messages()], 400);
         }
 
-        // store
-        $user = User::find($id);
+
         $addresses = $data['addresses'];
         $data = array_except($data, ['password_repeat', 'addresses']);
-        // Encrypt password
-        if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        }
+        $userdata = array_only($data, ['email', 'username', 'password']);
+        $enduserdata = array_except($data, ['email', 'username', 'password']);
 
-        $user->update($data);
+        // Encrypt password
+        if (isset($userdata['password'])) {
+            $userdata['password'] = bcrypt($userdata['password']);
+        }
+         // store
+        $endUser->update($enduserdata);
+        $endUser->user()->update($userdata);
 
         // Insert related addresses
-        $user->addresses()->delete();
+        $endUser->user->addresses()->delete();
         foreach ($addresses as $address) {
-            $user->addresses()->create($address);
+            $endUser->user->addresses()->create($address);
         }
 
-        return $user->load('addresses');
+        return $endUser;
     }
 
     /**
@@ -122,11 +139,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data, $id = 0)
+    protected function validator(array $data, $user_id = 0)
     {
-        $password_required = $id == 0 ? 'required' : '';
+        $password_required = $user_id == 0 ? 'required' : '';
         return Validator::make($data, [
-            'email' => 'required|max:255|unique:users,email,' . $id,
+            'email' => 'required|max:255|unique:users,email,' . $user_id,
             'name' => 'required|max:255',
             'photo' => 'image',
             'phone' => 'required|max:255',

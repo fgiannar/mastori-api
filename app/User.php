@@ -18,7 +18,14 @@ class User extends Authenticatable
    *
    * @var array
    */
-  protected $fillable = ['name', 'email', 'password', 'phone' ,'photo'];
+  protected $fillable = ['username', 'email', 'password'];
+
+  /**
+   * The attributes that are NOT mass assignable.
+   *
+   * @var array
+   */
+  protected $guarded = ['facebook_id'];
 
   /**
    * The attributes excluded from the model's JSON form.
@@ -26,6 +33,11 @@ class User extends Authenticatable
    * @var array
    */
   protected $hidden = ['password', 'remember_token'];
+
+  public function userable()
+  {
+      return $this->morphTo();
+  }
 
   /**
     * Get the addresses of the user.

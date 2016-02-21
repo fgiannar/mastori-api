@@ -27,19 +27,31 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['api']], function () {
-  // Mastoria
-	Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show', 'store', 'update']]);
-	// Users
-	Route::resource('users', 'UserController', ['only' => ['index', 'show', 'store', 'update']]);
-	// Ratings
-	Route::get('ratings', 'RatingController@index');
-	Route::post('mastoria/{mastori_id}/ratings', 'RatingController@store');
-	Route::put('ratings/{rating_id}', 'RatingController@update');
-	// Professions
-	Route::resource('professions', 'ProfessionController', ['only' => ['index', 'store', 'update', 'destroy']]);
-	// Appointments
-	Route::get('appointments', 'AppointmentController@index');
-	Route::get('appointments/{appointment_id}', 'AppointmentController@show');
-	Route::post('appointments', 'AppointmentController@store');
-	Route::patch('appointments/{appointment_id}', 'AppointmentController@arrange');
+	// Register Mastori
+	Route::post('mastoria', ['middleware' => ['guest'], 'uses' => 'MastoriController@store']);
+	// Register End User
+	Route::post('users', ['middleware' => ['guest'], 'uses' => 'EndUserController@store']);
+	// Authenticate users
+	Route::post('auth', ['middleware' => ['guest'], 'uses' => 'Auth\AuthenticateController@authenticate']);
+
+	Route::group(['middleware' => ['jwt.auth'/*, 'jwt.refresh'*/]], function() {
+		// Mastoria
+		Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show']]);
+		Route::put('mastoria/{id}', ['middleware' => ['roles:mastori'], 'uses' => 'MastoriController@update']);
+		// Users
+		Route::resource('users', 'EndUserController', ['only' => ['index', 'show']]);
+		Route::put('users/{id}', ['middleware' => ['roles:enduser'], 'uses' => 'EndUserController@update']);
+		// Ratings
+		Route::get('ratings', 'RatingController@index');
+		Route::post('mastoria/{mastori_id}/ratings', ['middleware' => ['roles:enduser'], 'uses' => 'RatingController@store']);
+		Route::put('ratings/{rating_id}', ['middleware' => ['roles:enduser'], 'uses' => 'RatingController@update']);
+		// Professions
+		Route::resource('professions', 'ProfessionController', ['only' => ['index', 'store', 'update', 'destroy']]);
+		// Appointments
+		Route::get('appointments', 'AppointmentController@index');
+		// Route::get('appointments/{appointment_id}', 'AppointmentController@show');
+		Route::post('appointments', ['middleware' => ['roles:enduser'], 'uses' => 'AppointmentController@store']);
+		Route::patch('appointments/{appointment_id}', ['middleware' => ['roles:mastori'], 'uses' => 'AppointmentController@arrange']);
+	});
+
 });
