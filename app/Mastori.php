@@ -7,6 +7,8 @@ use App\Rating;
 
 class Mastori extends Model
 {
+    use \Heroicpixels\Filterable\FilterableTrait;
+
     /**
      * The database table used by the model.
      *
@@ -61,6 +63,31 @@ class Mastori extends Model
         }
 
         return $array;
+    }
+
+    /**
+     * Scope a query to only include active mastoria.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
+    /**
+     * Scope a query to only include mastoria near (deafult radius is 5km) a certain location.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNear($query, $location, $radius)
+    {
+        $bindings['location'] = $location;
+        $bindings['radius'] = $radius;
+
+        return $query->whereHas('user.addresses', function ($q) use ($bindings) {
+          $q->distance($bindings['location'], $bindings['radius']);
+        });
     }
 
 }

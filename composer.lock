@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1f254cd32904b4b10fa870518e4741fe",
-    "content-hash": "b3a7e55fea85fc4374208a2ad7e2b63d",
+    "hash": "d85bd5b044716a57b9b9990c4f68db5e",
+    "content-hash": "df540ebc2d36f28a02623c3e7bfa48ca",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -229,6 +229,54 @@
                 "whoops"
             ],
             "time": "2016-01-30 14:24:26"
+        },
+        {
+            "name": "heroicpixels/filterable",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/heroicpixels/filterable.git",
+                "reference": "5d3f235ad9a5de1b556626ecd1de6edbe62e9346"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/heroicpixels/filterable/zipball/5d3f235ad9a5de1b556626ecd1de6edbe62e9346",
+                "reference": "5d3f235ad9a5de1b556626ecd1de6edbe62e9346",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=4.0.9",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Heroicpixels\\Filterable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dave Hodgins",
+                    "email": "dave@heroicpixels.com"
+                }
+            ],
+            "description": "Laravel package for dynamically filtering Eloquent results using URL query string.",
+            "keywords": [
+                "Laravel 4",
+                "database",
+                "eloquent",
+                "laravel"
+            ],
+            "time": "2016-02-18 20:57:20"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -3284,7 +3332,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "heroicpixels/filterable": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

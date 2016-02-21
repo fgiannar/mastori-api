@@ -19,10 +19,17 @@ class MastoriController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
          // TODO Add filters, pagination and return only active mastoria if NOT admin
-        return Mastori::with('user')->with('professions')->get();
+        $columns = ['last_name', 'avg_rating', 'profession' => 'mastoria_professions.mastori_id'];
+
+        $mastoria = Mastori::join('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id')->filterColumns($columns)->select('mastoria.*');
+        if ($request->input('near')) {
+            $mastoria = $mastoria->near($request->input('near'), $request->input('radius'));
+        }
+
+        return $mastoria->with('user')->with('professions')->get();
     }
 
     /**
@@ -161,8 +168,8 @@ class MastoriController extends Controller
             'password_repeat' => $password_required.'|same:password|max:255',
             'email' => 'required_without:username|email|max:255|unique:users,email,' . $user_id,
             'addresses' => 'required|array|min:1|max:10',
-            'addresses.*.lat' => 'required|numeric',
-            'addresses.*.lng' => 'required|numeric',
+            'addresses.*.lat' => 'required|numeric|between:-90,90',
+            'addresses.*.lng' => 'required|numeric|between:-180,180',
             'addresses.*.address' => 'required|max:255',
             'addresses.*.friendly_name' => 'max:255',
             'addresses.*.city' => 'required|max:255',

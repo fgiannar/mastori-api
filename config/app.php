@@ -157,6 +157,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
+        Heroicpixels\Filterable\FilterableServiceProvider::class,
     ],
 
     /*

@@ -24,6 +24,9 @@ class CreateAddressesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
+
+        /*Spatial Column*/
+        DB::statement('ALTER TABLE addresses ADD location POINT NOT NULL' );
     }
 
     /**
