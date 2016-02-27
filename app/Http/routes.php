@@ -39,6 +39,7 @@ Route::group(['middleware' => ['api']], function () {
 		Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show']]);
 		Route::put('mastoria/{id}', ['middleware' => ['roles:mastori'], 'uses' => 'MastoriController@update']);
 		// Users
+		// TODO admin only
 		Route::resource('users', 'EndUserController', ['only' => ['index', 'show']]);
 		Route::put('users/{id}', ['middleware' => ['roles:enduser'], 'uses' => 'EndUserController@update']);
 		// Ratings
