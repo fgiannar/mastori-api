@@ -20,10 +20,29 @@ class AppointmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-         // TODO Add filters, pagination and return appointment depending on user role
-        return Appointment::all();
+        $filterColumns = [
+            'user_id'   => 'end_user_id',
+            'mastori_id' => 'mastori_id',
+            'status' => 'status',
+            'created_at' => 'created_at'
+        ];
+
+        $appointments = Appointment::filterColumns($filterColumns)->with('address');
+        switch (Auth::user()->userable_type) {
+            case 'App\EndUser':
+                $appointments = $appointments->where('end_user_id', Auth::user()->userable->id)->with('mastori');
+                break;
+            case 'App\Mastori':
+                $appointments = $appointments->where('mastori_id', Auth::user()->userable->id)->with('user');
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        return $appointments->paginate($request->input('per_page'));
     }
 
     /**
