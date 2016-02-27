@@ -17,20 +17,18 @@ use Auth;
 
 class RatingController extends Controller
 {
-    // TODO Add middleware for checking permissions after auth implementation
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-         // TODO Add filters, pagination
         $filterColumns = [
             'user_id'   => 'end_user_id',
             'mastori_id' => 'mastori_id',
-            'rating' => 'rating'
+            'rating' => 'rating',
+            'created_at' => 'created_at'
         ];
         $ratings = Rating::with('mastori')->with('user')->filterColumns($filterColumns);
 
@@ -38,7 +36,7 @@ class RatingController extends Controller
             $ratings = $ratings->approved();
         }
 
-        return $ratings->get();
+        return $ratings->paginate($request->input('per_page'));
     }
 
     /**

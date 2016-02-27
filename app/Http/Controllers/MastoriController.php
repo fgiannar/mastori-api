@@ -15,7 +15,6 @@ use Auth;
 
 class MastoriController extends Controller
 {
-    // TODO Add middleware for checking permissions after auth implementation
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +26,8 @@ class MastoriController extends Controller
             'active'    => 'active',
             'last_name' => 'last_name',
             'avg_rating' => 'avg_rating',
-            'profession' => 'mastoria_professions.mastori_id'
+            'profession' => 'mastoria_professions.mastori_id',
+            'created_at' => 'created_at'
         ];
 
         $mastoria = Mastori::join('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id')->filterColumns($filterColumns)->select('mastoria.*');
@@ -41,7 +41,7 @@ class MastoriController extends Controller
             $mastoria = $mastoria->active();
         }
 
-        return $mastoria->with('user')->with('professions')->get();
+        return $mastoria->with('user')->with('professions')->paginate($request->input('per_page'));
     }
 
     /**
