@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class EndUser extends Model
 {
+
+  use \Heroicpixels\Filterable\FilterableTrait;
+
   /**
    * The database table used by the model.
    *

@@ -20,10 +20,14 @@ class EndUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-         // TODO Add filters, pagination and return only active usera if NOT admin
-        return EndUser::with('user')->get();
+        $filterColumns = [
+            'name' => 'name',
+            'created_at' => 'created_at'
+        ];
+
+        return EndUser::with('user')->filterColumns($filterColumns)->paginate($request->input('per_page'));
     }
 
     /**
