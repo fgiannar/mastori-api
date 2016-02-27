@@ -27,7 +27,18 @@ class RatingController extends Controller
     public function index()
     {
          // TODO Add filters, pagination
-        return Rating::with('mastori')->with('user')->get();
+        $filterColumns = [
+            'user_id'   => 'end_user_id',
+            'mastori_id' => 'mastori_id',
+            'rating' => 'rating'
+        ];
+        $ratings = Rating::with('mastori')->with('user')->filterColumns($filterColumns);
+
+        if (Auth::user()->userable_type !== 'App\Admin') {
+            $ratings = $ratings->approved();
+        }
+
+        return $ratings->get();
     }
 
     /**
