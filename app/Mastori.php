@@ -76,6 +76,17 @@ class Mastori extends Model
     }
 
     /**
+     * Scope a query to search for q in first_name, last_name, paratsouki, description.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeQ($query, $q)
+    {
+        $like = '%' . $q . '%';
+        return $query->where('first_name', 'like', $like)->orWhere('last_name', 'like', $like)->orWhere('paratsoukli', 'like', $like)->orWhere('description', 'like', $like);
+    }
+
+    /**
      * Scope a query to only include mastoria near (deafult radius is 5km) a certain location.
      *
      * @return \Illuminate\Database\Eloquent\Builder

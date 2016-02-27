@@ -11,6 +11,8 @@ use App\Http\Controllers\Controller;
 use App\Mastori;
 use App\User;
 
+use Auth;
+
 class MastoriController extends Controller
 {
     // TODO Add middleware for checking permissions after auth implementation
@@ -21,12 +23,22 @@ class MastoriController extends Controller
      */
     public function index(Request $request)
     {
-         // TODO Add filters, pagination and return only active mastoria if NOT admin
-        $columns = ['last_name', 'avg_rating', 'profession' => 'mastoria_professions.mastori_id'];
+        $filterColumns = [
+            'active'    => 'active',
+            'last_name' => 'last_name',
+            'avg_rating' => 'avg_rating',
+            'profession' => 'mastoria_professions.mastori_id'
+        ];
 
-        $mastoria = Mastori::join('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id')->filterColumns($columns)->select('mastoria.*');
+        $mastoria = Mastori::join('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id')->filterColumns($filterColumns)->select('mastoria.*');
+        if ($request->input('q')) {
+            $mastoria = $mastoria->q($request->input('q'));
+        }
         if ($request->input('near')) {
             $mastoria = $mastoria->near($request->input('near'), $request->input('radius'));
+        }
+        if (Auth::user()->userable_type !== 'App\Admin') {
+            $mastoria = $mastoria->active();
         }
 
         return $mastoria->with('user')->with('professions')->get();
