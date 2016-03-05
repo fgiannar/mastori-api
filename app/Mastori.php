@@ -23,6 +23,14 @@ class Mastori extends Model
      */
     protected $fillable = ['first_name', 'last_name', 'paratsoukli', 'description', 'pricelist', 'photo', 'phone'];
 
+    /**
+   * The attributes that are hidden from the response.
+   *
+   * @var array
+   */
+    protected $hidden = ['pivot'];
+
+
 
     public function user()
     {

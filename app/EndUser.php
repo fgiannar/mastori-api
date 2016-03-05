@@ -23,10 +23,22 @@ class EndUser extends Model
    */
   protected $fillable = ['name', 'phone' ,'photo'];
 
+   /**
+   * The attributes that are hidden from the response.
+   *
+   * @var array
+   */
+  protected $hidden = ['pivot'];
+
 
   public function user()
   {
      return $this->morphOne('App\User', 'userable');
+  }
+
+  public function favorites()
+  {
+     return $this->belongsToMany('App\Mastori', 'favorites', 'end_user_id', 'mastori_id');
   }
 
   /**

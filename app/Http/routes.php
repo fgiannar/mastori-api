@@ -53,6 +53,11 @@ Route::group(['middleware' => ['api']], function () {
 		// Route::get('appointments/{appointment_id}', 'AppointmentController@show');
 		Route::post('appointments', ['middleware' => ['roles:enduser'], 'uses' => 'AppointmentController@store']);
 		Route::patch('appointments/{appointment_id}', ['middleware' => ['roles:mastori'], 'uses' => 'AppointmentController@arrange']);
+		// Favorites
+		Route::get('users/{user_id}/favorites', ['middleware' => ['roles:enduser|admin'], 'uses' => 'FavoriteController@favorites']);
+		// Route::get('appointments/{appointment_id}', 'AppointmentController@show');
+		Route::post('favorites', ['middleware' => ['roles:enduser'], 'uses' => 'FavoriteController@add']);
+		Route::delete('favorites/{mastori_id}', ['middleware' => ['roles:enduser'], 'uses' => 'FavoriteController@remove']);
 	});
 
 });
