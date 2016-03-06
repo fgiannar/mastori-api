@@ -35,4 +35,13 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'facebook' => [
+        'baseurl' => 'https://graph.facebook.com/',
+        'tokenurl' => '/oauth/access_token',
+        'version' => 'v2.5',
+        'app_id' =>  env('FACEBOOK_ID'),
+        'app_secret' =>  env('FACEBOOK_SECRET'),
+        'v' => 20130815,
+    ],
+
 ];

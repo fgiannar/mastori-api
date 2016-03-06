@@ -33,6 +33,8 @@ Route::group(['middleware' => ['api']], function () {
 	Route::post('users', ['middleware' => ['guest'], 'uses' => 'EndUserController@store']);
 	// Authenticate users
 	Route::post('auth', ['middleware' => ['guest'], 'uses' => 'Auth\AuthenticateController@authenticate']);
+	// FB Auth
+	Route::post('auth/facebook', ['uses' => 'Auth\AuthenticateController@facebook']);
 
 	Route::group(['middleware' => ['jwt.auth'/*, 'jwt.refresh'*/]], function() {
 		// Mastoria
@@ -55,9 +57,10 @@ Route::group(['middleware' => ['api']], function () {
 		Route::patch('appointments/{appointment_id}', ['middleware' => ['roles:mastori'], 'uses' => 'AppointmentController@arrange']);
 		// Favorites
 		Route::get('users/{user_id}/favorites', ['middleware' => ['roles:enduser|admin'], 'uses' => 'FavoriteController@favorites']);
-		// Route::get('appointments/{appointment_id}', 'AppointmentController@show');
 		Route::post('favorites', ['middleware' => ['roles:enduser'], 'uses' => 'FavoriteController@add']);
 		Route::delete('favorites/{mastori_id}', ['middleware' => ['roles:enduser'], 'uses' => 'FavoriteController@remove']);
+		// Unlink social account (up to now Facabook)
+    Route::post('auth/unlink', 'AuthenticateController@unlink');
 	});
 
 });
