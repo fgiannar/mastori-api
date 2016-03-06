@@ -158,6 +158,7 @@ return [
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
         Heroicpixels\Filterable\FilterableServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
     ],
 
     /*
