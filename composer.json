@@ -9,7 +9,9 @@
         "laravel/framework": "5.2.*",
         "graham-campbell/exceptions": "^8.3",
         "tymon/jwt-auth": "0.5.*",
-        "heroicpixels/filterable": "dev-master"
+        "heroicpixels/filterable": "dev-master",
+        "barryvdh/laravel-cors": "^0.8.0",
+        "guzzlehttp/guzzle": "^6.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

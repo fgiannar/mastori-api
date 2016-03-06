@@ -1,27 +1,40 @@
-# Laravel PHP Framework
+# Mastori API
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## Installation
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+A working installation of Apache 2.4 or higher with PHP 5.6 or higher,
+and MySQL 5.6 or higher (for geospatial queries to work) is required for this application to work properly.
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+__Install Composer__ if you don't have it installed already.
 
-## Official Documentation
+    curl -sS https://getcomposer.org/installer | php
+    mv composer.phar /usr/local/bin/composer
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+__Clone Mastori API__ to a directory accessible by the web server. eg. `/var/www`
 
-## Contributing
+    git clone https://github.com/fgiannar/mastori-api.git
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+__Install dependencies, configure permissions, and configure databse__
 
-## Security Vulnerabilities
+To avoid any issues with the `artisan` cli tool, the `.env` mysql host should be
+set to `127.0.0.1` instead of 'localhost'. If the mysql is installed on a separate
+server this is not required.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+    cd mastori-api
+    composer install
+    chmod -R 777 storage
+    cp .env.example .env
+    vi .env # set at least database values (also FACEBOOK_ID and FACEBOOK_SECRET for FB related functionalities to work)
+    php artisan key:generate
+    php artisan migrate:refresh --seed
 
-## License
+__Configure Web Server__ to proper root directory
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+At this point the application is ready. All we need is to point our web server
+to the correct directory, eg `/var/www/mastori-api/public`, and restart our web server.
+
+Last thing is to make sure that Apache's `mod_rewrite` is enabled and that
+`AllowOverride` is set to `All` for our directory.
+
+    a2enmod rewrite
+    service apache2 restart
