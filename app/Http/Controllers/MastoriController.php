@@ -34,7 +34,7 @@ class MastoriController extends Controller
    *     ),
    *     @SWG\Response(
    *         response=200,
-   *         description="mastori response",
+   *         description="All mastoria response",
    *         @SWG\Schema(
    *             type="array",
    *             @SWG\Items(ref="#/definitions/mastori")

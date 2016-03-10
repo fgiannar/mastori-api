@@ -16,6 +16,19 @@ use Swagger\Annotations as SWG;
  * )
  */
 
+ /**
+ *     @SWG\Definition(
+ *         definition="errorModel",
+ *         required={"error"},
+ *         @SWG\Property(
+ *             property="error",
+ *             type="string",
+ *             readOnly=true
+ *         )
+ *     )
+ */
+
+
 /*
 |--------------------------------------------------------------------------
 | Routes File

@@ -33,7 +33,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "mastori response",
+                        "description": "All mastoria response",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -90,6 +90,44 @@
                     },
                     "500": {
                         "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/ratings": {
+            "get": {
+                "tags": [
+                    "ratings"
+                ],
+                "description": "Returns all the ratings",
+                "operationId": "getRatings",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All ratings response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/rating"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "token_not_provided",
                         "schema": {
                             "$ref": "#/definitions/errorModel"
                         }
@@ -172,6 +210,17 @@
                     "items": {
                         "$ref": "#/definitions/mastori"
                     }
+                }
+            }
+        },
+        "errorModel": {
+            "required": [
+                "error"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "readOnly": true
                 }
             }
         },
@@ -304,7 +353,11 @@
                 "status": {
                     "type": "string",
                     "default": "pending",
-                    "enum": "['pending', 'approved', 'cancelled']"
+                    "enum": [
+                        "pending",
+                        "approved",
+                        "cancelled"
+                    ]
                 },
                 "updated_at": {
                     "type": "dateTime",

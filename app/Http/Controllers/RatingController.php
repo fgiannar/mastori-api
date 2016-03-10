@@ -14,14 +14,42 @@ use App\Rating;
 use App\Mastori;
 
 use Auth;
+use Swagger\Annotations as SWG;
 
 class RatingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+  /**
+   * @SWG\Get(
+   *     path="/ratings",
+   *     description="Returns all the ratings",
+   *     operationId="getRatings",
+   *     tags={"ratings"},
+   *     produces={"application/json"},
+   *     @SWG\Parameter(
+   *         description="Access token",
+   *         in="header",
+   *         name="Authorization",
+   *         required=true,
+   *         type="string"
+   *     ),
+   *     @SWG\Response(
+   *         response=200,
+   *         description="All ratings response",
+   *         @SWG\Schema(
+   *             type="array",
+   *             @SWG\Items(ref="#/definitions/rating")
+   *         ),
+   *     ),
+   *     @SWG\Response(
+   *         response="400",
+   *         description="token_not_provided",
+   *         @SWG\Schema(
+   *             ref="#/definitions/errorModel"
+   *         )
+   *     )
+   * )
+   */
     public function index(Request $request)
     {
         $filterColumns = [

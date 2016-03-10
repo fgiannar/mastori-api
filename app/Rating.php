@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-
+//@todo add mastori and user to model definition
 /**
 *     @SWG\Definition(
 *         definition="rating",
@@ -30,7 +30,7 @@ use DB;
 *         @SWG\Property(
 *             property="status",
 *             type="string",
-*             enum="['pending', 'approved', 'cancelled']",
+*             enum={ "pending", "approved", "cancelled"},
 *             default="pending"
 *         ),
 *         @SWG\Property(
