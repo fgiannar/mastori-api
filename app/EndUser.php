@@ -4,6 +4,46 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+*     @SWG\Definition(
+*         definition="endUser",
+*         required={"name", "phone"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="name",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="phone",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="photo",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="created_at",
+*             type="dateTime",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="updated_at",
+*             type="dateTime",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="favorites",
+*             type="array",
+*             @SWG\Items(ref="#/definitions/mastori")
+*         ),
+*     )
+*/
+
+
 class EndUser extends Model
 {
 

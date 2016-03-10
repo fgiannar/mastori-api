@@ -5,6 +5,52 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
+/**
+*     @SWG\Definition(
+*         definition="address",
+*         required={"lat", "lng", "address", "city", "country"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="lat",
+*             type="double"
+*         ),
+*         @SWG\Property(
+*             property="lng",
+*             type="double"
+*         ),
+*         @SWG\Property(
+*             property="address",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="friendly_name",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="city",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="country",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="created_at",
+*             type="dateTime",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="updated_at",
+*             type="dateTime",
+*             readOnly=true
+*         ),
+*     )
+*/
+
 class Address extends Model {
 
   /**

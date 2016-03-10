@@ -12,6 +12,9 @@ use App\Mastori;
 use App\User;
 
 use Auth;
+use Swagger\Annotations as SWG;
+
+
 
 class MastoriController extends Controller
 {
@@ -20,6 +23,40 @@ class MastoriController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
+     /**
+   * @SWG\Get(
+   *     path="/mastoria",
+   *     description="Returns all the mastoria",
+   *     operationId="getMastoria",
+   *     tags={"mastoria"},
+   *     produces={"application/json"},
+   *     @SWG\Parameter(
+   *         description="Access token",
+   *         in="header",
+   *         name="Authorization",
+   *         required=true,
+   *         type="string"
+   *     ),
+   *     @SWG\Response(
+   *         response=200,
+   *         description="mastori response",
+   *         @SWG\Schema(
+   *             type="array",
+   *             @SWG\Items(ref="#/definitions/mastori")
+   *         ),
+   *     ),
+   *     @SWG\Response(
+   *         response="400",
+   *         description="token_not_provided",
+   *         @SWG\Schema(
+   *             ref="#/definitions/errorModel"
+   *         )
+   *     )
+   * )
+   */
     public function index(Request $request)
     {
         $filterColumns = [

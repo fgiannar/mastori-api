@@ -4,6 +4,37 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
+/**
+*     @SWG\Definition(
+*         definition="profession",
+*         required={"tag", "title"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="tag",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="title",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="created_at",
+*             type="dateTime",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="updated_at",
+*             type="dateTime",
+*             readOnly=true
+*         ),
+*     )
+*/
+
 class Profession extends Model {
 
   /**

@@ -1,0 +1,216 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Mastori Api specification",
+        "description": "",
+        "contact": {
+            "email": "giannaropoulou.foteini@gmail.com;tania.pets@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/mastoria": {
+            "get": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Returns all the mastoria",
+                "operationId": "getMastoria",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "mastori response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/mastori"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "token_not_provided",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "address": {
+            "required": [
+                "lat",
+                "lng",
+                "address",
+                "city",
+                "country"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "lat": {
+                    "type": "double"
+                },
+                "lng": {
+                    "type": "double"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "friendly_name": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "dateTime",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "dateTime",
+                    "readOnly": true
+                }
+            }
+        },
+        "endUser": {
+            "required": [
+                "name",
+                "phone"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "dateTime",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "dateTime",
+                    "readOnly": true
+                },
+                "favorites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/mastori"
+                    }
+                }
+            }
+        },
+        "mastori": {
+            "required": [
+                "last_name",
+                "first_name",
+                "phone",
+                "pricelist"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "pricelist": {
+                    "type": "string"
+                },
+                "avg_response_time": {
+                    "type": "integer"
+                },
+                "avg_rating": {
+                    "type": "float"
+                },
+                "active": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "dateTime",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "dateTime",
+                    "readOnly": true
+                },
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/address"
+                    }
+                },
+                "professions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/profession"
+                    }
+                }
+            }
+        },
+        "profession": {
+            "required": [
+                "tag",
+                "title"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "tag": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "dateTime",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "dateTime",
+                    "readOnly": true
+                }
+            }
+        }
+    }
+}
