@@ -48,6 +48,53 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Adds a new mastori in database",
+                "operationId": "addMastori",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns created Mastori object",
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    },
+                    "400": {
+                        "description": "unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
             }
         }
     },
@@ -130,6 +177,9 @@
         },
         "mastori": {
             "required": [
+                "username",
+                "email",
+                "password",
                 "last_name",
                 "first_name",
                 "phone",
@@ -140,10 +190,26 @@
                     "type": "integer",
                     "readOnly": true
                 },
+                "username": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password"
+                },
                 "last_name": {
                     "type": "string"
                 },
                 "first_name": {
+                    "type": "string"
+                },
+                "paratsoukli": {
+                    "type": "string"
+                },
+                "facebook_id": {
                     "type": "string"
                 },
                 "phone": {
@@ -205,6 +271,40 @@
                 "created_at": {
                     "type": "dateTime",
                     "readOnly": true
+                },
+                "updated_at": {
+                    "type": "dateTime",
+                    "readOnly": true
+                }
+            }
+        },
+        "rating": {
+            "required": [
+                "rating",
+                "editing_expires_at",
+                "body",
+                "status",
+                "enduser",
+                "mastori"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "editing_expires_at": {
+                    "type": "dateTime"
+                },
+                "body": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "default": "pending",
+                    "enum": "['pending', 'approved', 'cancelled']"
                 },
                 "updated_at": {
                     "type": "dateTime",

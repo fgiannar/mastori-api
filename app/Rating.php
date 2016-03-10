@@ -5,6 +5,42 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
+
+/**
+*     @SWG\Definition(
+*         definition="rating",
+*         required={"rating", "editing_expires_at", "body", "status", "enduser", "mastori"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="rating",
+*             type="integer"
+*         ),
+*         @SWG\Property(
+*             property="editing_expires_at",
+*             type="dateTime"
+*         ),
+*         @SWG\Property(
+*             property="body",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="status",
+*             type="string",
+*             enum="['pending', 'approved', 'cancelled']",
+*             default="pending"
+*         ),
+*         @SWG\Property(
+*             property="updated_at",
+*             type="dateTime",
+*             readOnly=true
+*         ),
+*     )
+*/
+
 class Rating extends Model
 {
 

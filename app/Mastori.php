@@ -8,11 +8,24 @@ use App\Rating;
 /**
 *     @SWG\Definition(
 *         definition="mastori",
-*         required={"last_name", "first_name", "phone", "pricelist"},
+*         required={"username", "email", "password", "last_name", "first_name", "phone", "pricelist"},
 *         @SWG\Property(
 *             property="id",
 *             type="integer",
 *             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="username",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="email",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="password",
+*             type="string",
+*             format="password"
 *         ),
 *         @SWG\Property(
 *             property="last_name",
@@ -20,6 +33,14 @@ use App\Rating;
 *         ),
 *         @SWG\Property(
 *             property="first_name",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="paratsoukli",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="facebook_id",
 *             type="string"
 *         ),
 *         @SWG\Property(

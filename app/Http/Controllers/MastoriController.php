@@ -18,15 +18,7 @@ use Swagger\Annotations as SWG;
 
 class MastoriController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-
-
-     /**
+  /**
    * @SWG\Get(
    *     path="/mastoria",
    *     description="Returns all the mastoria",
@@ -81,12 +73,43 @@ class MastoriController extends Controller
         return $mastoria->with('user')->with('professions')->paginate($request->input('per_page'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+  /**
+   * @SWG\Post(
+   *     path="/mastoria",
+   *     operationId="addMastori",
+   *     tags={"mastoria"},
+   *     description="Adds a new mastori in database",
+   *     produces={"application/json"},
+   *     @SWG\Parameter(
+   *         description="Access token",
+   *         in="header",
+   *         name="Authorization",
+   *         required=true,
+   *         type="string"
+   *     ),
+   *     @SWG\Parameter(
+   *         name="body",
+   *         in="body",
+   *         required=true,
+   *         @SWG\Schema(ref="#/definitions/mastori")
+   *     ),
+   *     @SWG\Response(
+   *         response=200,
+   *         description="Returns created Mastori object",
+   *         @SWG\Schema(ref="#/definitions/mastori")
+   *     ),
+   *     @SWG\Response(
+   *         response="400",
+   *         description="unauthorized",
+   *         @SWG\Schema(ref="#/definitions/errorModel")
+   *     ),
+   *     @SWG\Response(
+   *         response="500",
+   *         description="error",
+   *         @SWG\Schema(ref="#/definitions/errorModel")
+   *     )
+   * )
+   */
     public function store(Request $request)
     {
         $data = $request->all();
