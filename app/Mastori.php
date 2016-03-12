@@ -21,7 +21,7 @@ class Mastori extends Model
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'paratsoukli', 'description', 'pricelist', 'photo', 'phone'];
+    protected $fillable = ['first_name', 'last_name', 'paratsoukli', 'description', 'pricelist', 'photo', 'phone', 'offers'];
 
     /**
    * The attributes that are hidden from the response.
@@ -81,6 +81,16 @@ class Mastori extends Model
     public function scopeActive($query)
     {
         return $query->where('active', 1);
+    }
+
+    /**
+     * Scope a query to only include mastoria with offers.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOffers($query)
+    {
+        return $query->whereNotNull('offers');
     }
 
     /**

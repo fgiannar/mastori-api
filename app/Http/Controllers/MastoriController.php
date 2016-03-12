@@ -25,6 +25,7 @@ class MastoriController extends Controller
         $filterColumns = [
             'active'    => 'active',
             'last_name' => 'last_name',
+            'offers'    => 'offers',
             'avg_rating' => 'avg_rating',
             'profession' => 'mastoria_professions.mastori_id',
             'created_at' => 'created_at'
@@ -33,6 +34,9 @@ class MastoriController extends Controller
         $mastoria = Mastori::join('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id')->filterColumns($filterColumns)->select('mastoria.*');
         if ($request->input('q')) {
             $mastoria = $mastoria->q($request->input('q'));
+        }
+        if ($request->input('only_offers')) {
+            $mastoria = $mastoria->offers();
         }
         if ($request->input('near')) {
             $mastoria = $mastoria->near($request->input('near'), $request->input('radius'));
