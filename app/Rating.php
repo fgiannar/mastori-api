@@ -9,7 +9,7 @@ use DB;
 /**
 *     @SWG\Definition(
 *         definition="rating",
-*         required={"rating", "editing_expires_at", "body", "status", "enduser", "mastori"},
+*         required={"id", "rating", "editing_expires_at", "body", "status", "enduser", "mastori"},
 *         @SWG\Property(
 *             property="id",
 *             type="integer",
@@ -21,7 +21,8 @@ use DB;
 *         ),
 *         @SWG\Property(
 *             property="editing_expires_at",
-*             type="dateTime"
+*             type="string",
+*             format="date-time",
 *         ),
 *         @SWG\Property(
 *             property="body",
@@ -34,10 +35,41 @@ use DB;
 *             default="pending"
 *         ),
 *         @SWG\Property(
-*             property="updated_at",
-*             type="dateTime",
+*             property="mastori",
+*             ref= "#/definitions/userShortInfo"
+*         ),
+*         @SWG\Property(
+*             property="user",
+*             ref= "#/definitions/userShortInfo"
+*         ),
+*         @SWG\Property(
+*             property="created_at",
+*              type="string",
+*              format="date-time",
 *             readOnly=true
 *         ),
+*         @SWG\Property(
+*             property="updated_at",
+*              type="string",
+*              format="date-time",
+*             readOnly=true
+*         ),
+*     )
+*/
+
+/**
+*     @SWG\Definition(
+*         definition="userShortInfo",
+*         required={"name", "id"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="name",
+*             type="string"
+*         )
 *     )
 */
 

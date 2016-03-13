@@ -12,6 +12,44 @@
         "http"
     ],
     "paths": {
+        "/appointments": {
+            "get": {
+                "tags": [
+                    "appointments"
+                ],
+                "description": "Returns all the appointments of the auth user",
+                "operationId": "getAppointements",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All users appointments response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/appointment"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "token_not_provided",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
         "/mastoria": {
             "get": {
                 "tags": [
@@ -60,6 +98,101 @@
                 ],
                 "parameters": [
                     {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mastoriPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created Mastori object",
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/mastoria/{id}": {
+            "get": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Fetches a mastori",
+                "operationId": "getmastori",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of mastorito get",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mastori response",
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    },
+                    "400": {
+                        "description": "unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "404": {
+                        "description": "no found",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Edits a mastori",
+                "operationId": "editmastori",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of mastori to update",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
                         "name": "Authorization",
                         "in": "header",
                         "description": "Access token",
@@ -77,21 +210,21 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns created Mastori object",
+                        "description": "Mastori response",
                         "schema": {
                             "$ref": "#/definitions/mastori"
                         }
                     },
-                    "400": {
+                    "401": {
                         "description": "unauthorized",
                         "schema": {
                             "$ref": "#/definitions/errorModel"
                         }
                     },
-                    "500": {
-                        "description": "error",
+                    "400": {
+                        "description": "validation errors",
                         "schema": {
-                            "$ref": "#/definitions/errorModel"
+                            "$ref": "#/definitions/validationsErrorsModel"
                         }
                     }
                 }
@@ -151,10 +284,12 @@
                     "readOnly": true
                 },
                 "lat": {
-                    "type": "double"
+                    "type": "number",
+                    "format": "double"
                 },
                 "lng": {
-                    "type": "double"
+                    "type": "number",
+                    "format": "double"
                 },
                 "address": {
                     "type": "string"
@@ -169,11 +304,73 @@
                     "type": "string"
                 },
                 "created_at": {
-                    "type": "dateTime",
+                    "type": "string",
+                    "format": "date-time",
                     "readOnly": true
                 },
                 "updated_at": {
-                    "type": "dateTime",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                }
+            }
+        },
+        "appointment": {
+            "required": [
+                "id",
+                "issue",
+                "available_datetimes",
+                "deadline",
+                "additional_comments",
+                "status",
+                "mastori",
+                "user",
+                "address"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "issue": {
+                    "type": "string"
+                },
+                "available_datetimes": {
+                    "type": "string"
+                },
+                "additional_comments": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "status": {
+                    "type": "string",
+                    "default": "pending",
+                    "enum": [
+                        "pending",
+                        "approved",
+                        "cancelled"
+                    ]
+                },
+                "mastori": {
+                    "$ref": "#/definitions/userShortInfo"
+                },
+                "user": {
+                    "$ref": "#/definitions/userShortInfo"
+                },
+                "address": {
+                    "$ref": "#/definitions/address"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
                     "readOnly": true
                 }
             }
@@ -198,11 +395,13 @@
                     "type": "string"
                 },
                 "created_at": {
-                    "type": "dateTime",
+                    "type": "string",
+                    "format": "date-time",
                     "readOnly": true
                 },
                 "updated_at": {
-                    "type": "dateTime",
+                    "type": "string",
+                    "format": "date-time",
                     "readOnly": true
                 },
                 "favorites": {
@@ -221,6 +420,36 @@
                 "error": {
                     "type": "string",
                     "readOnly": true
+                }
+            }
+        },
+        "fieldValidationDescription": {
+            "properties": {
+                "error_description": {
+                    "type": "string"
+                }
+            }
+        },
+        "validationerror": {
+            "properties": {
+                "fieldName": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fieldValidationDescription"
+                    }
+                }
+            }
+        },
+        "validationsErrorsModel": {
+            "required": [
+                "errors"
+            ],
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/validationerror"
+                    }
                 }
             }
         },
@@ -274,17 +503,20 @@
                     "type": "integer"
                 },
                 "avg_rating": {
-                    "type": "float"
+                    "type": "number",
+                    "format": "float"
                 },
                 "active": {
                     "type": "integer"
                 },
                 "created_at": {
-                    "type": "dateTime",
+                    "type": "string",
+                    "format": "date-time",
                     "readOnly": true
                 },
                 "updated_at": {
-                    "type": "dateTime",
+                    "type": "string",
+                    "format": "date-time",
                     "readOnly": true
                 },
                 "addresses": {
@@ -299,7 +531,20 @@
                         "$ref": "#/definitions/profession"
                     }
                 }
-            }
+            },
+            "type": "object"
+        },
+        "mastoriPost": {
+            "properties": {
+                "password_repeat": {
+                    "type": "string"
+                }
+            },
+            "allOf": [
+                {
+                    "$ref": "#definitions/mastori"
+                }
+            ]
         },
         "profession": {
             "required": [
@@ -318,17 +563,20 @@
                     "type": "string"
                 },
                 "created_at": {
-                    "type": "dateTime",
+                    "type": "string",
+                    "format": "date-time",
                     "readOnly": true
                 },
                 "updated_at": {
-                    "type": "dateTime",
+                    "type": "string",
+                    "format": "date-time",
                     "readOnly": true
                 }
             }
         },
         "rating": {
             "required": [
+                "id",
                 "rating",
                 "editing_expires_at",
                 "body",
@@ -345,7 +593,8 @@
                     "type": "integer"
                 },
                 "editing_expires_at": {
-                    "type": "dateTime"
+                    "type": "string",
+                    "format": "date-time"
                 },
                 "body": {
                     "type": "string"
@@ -359,9 +608,36 @@
                         "cancelled"
                     ]
                 },
-                "updated_at": {
-                    "type": "dateTime",
+                "mastori": {
+                    "$ref": "#/definitions/userShortInfo"
+                },
+                "user": {
+                    "$ref": "#/definitions/userShortInfo"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
                     "readOnly": true
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                }
+            }
+        },
+        "userShortInfo": {
+            "required": [
+                "name",
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         }

@@ -14,7 +14,6 @@ use App\Rating;
 use App\Mastori;
 
 use Auth;
-use Swagger\Annotations as SWG;
 
 class RatingController extends Controller
 {

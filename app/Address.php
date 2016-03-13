@@ -16,11 +16,13 @@ use DB;
 *         ),
 *         @SWG\Property(
 *             property="lat",
-*             type="double"
+*             type="number",
+*             format="double"
 *         ),
 *         @SWG\Property(
 *             property="lng",
-*             type="double"
+*             type="number",
+*             format="double"
 *         ),
 *         @SWG\Property(
 *             property="address",
@@ -40,14 +42,16 @@ use DB;
 *         ),
 *         @SWG\Property(
 *             property="created_at",
-*             type="dateTime",
-*             readOnly=true
+*              type="string",
+*              format="date-time",
+*              readOnly=true
 *         ),
 *         @SWG\Property(
 *             property="updated_at",
-*             type="dateTime",
+*              type="string",
+*              format="date-time",
 *             readOnly=true
-*         ),
+*         )
 *     )
 */
 

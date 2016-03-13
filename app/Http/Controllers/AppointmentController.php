@@ -15,6 +15,38 @@ use Auth;
 
 class AppointmentController extends Controller
 {
+
+  /**
+   * @SWG\Get(
+   *     path="/appointments",
+   *     description="Returns all the appointments of the auth user",
+   *     operationId="getAppointements",
+   *     tags={"appointments"},
+   *     produces={"application/json"},
+   *     @SWG\Parameter(
+   *         description="Access token",
+   *         in="header",
+   *         name="Authorization",
+   *         required=true,
+   *         type="string"
+   *     ),
+   *     @SWG\Response(
+   *         response=200,
+   *         description="All users appointments response",
+   *         @SWG\Schema(
+   *             type="array",
+   *             @SWG\Items(ref="#/definitions/appointment")
+   *         ),
+   *     ),
+   *     @SWG\Response(
+   *         response="400",
+   *         description="token_not_provided",
+   *         @SWG\Schema(
+   *             ref="#/definitions/errorModel"
+   *         )
+   *     )
+   * )
+   */
     /**
      * Display a listing of the resource.
      *

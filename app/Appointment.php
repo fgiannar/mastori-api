@@ -5,6 +5,64 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
+/**
+*     @SWG\Definition(
+*         definition="appointment",
+*         required={"id", "issue", "available_datetimes", "deadline", "additional_comments", "status", "mastori", "user", "address"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="issue",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="available_datetimes",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="additional_comments",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="deadline",
+*             type="string",
+*             format="date-time",
+*         ),
+*         @SWG\Property(
+*             property="status",
+*             type="string",
+*             enum={ "pending", "approved", "cancelled"},
+*             default="pending"
+*         ),
+*         @SWG\Property(
+*             property="mastori",
+*             ref= "#/definitions/userShortInfo"
+*         ),
+*         @SWG\Property(
+*             property="user",
+*             ref= "#/definitions/userShortInfo"
+*         ),
+*         @SWG\Property(
+*             property="address",
+*             ref= "#/definitions/address"
+*         ),
+*         @SWG\Property(
+*             property="created_at",
+*              type="string",
+*              format="date-time",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="updated_at",
+*              type="string",
+*              format="date-time",
+*             readOnly=true
+*         ),
+*     )
+*/
 class Appointment extends Model
 {
 

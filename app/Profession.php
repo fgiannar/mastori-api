@@ -24,12 +24,14 @@ use Illuminate\Database\Eloquent\Model;
 *         ),
 *         @SWG\Property(
 *             property="created_at",
-*             type="dateTime",
+*              type="string",
+*              format="date-time",
 *             readOnly=true
 *         ),
 *         @SWG\Property(
 *             property="updated_at",
-*             type="dateTime",
+*              type="string",
+*              format="date-time",
 *             readOnly=true
 *         ),
 *     )

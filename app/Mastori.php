@@ -8,6 +8,7 @@ use App\Rating;
 /**
 *     @SWG\Definition(
 *         definition="mastori",
+*         type="object",
 *         required={"username", "email", "password", "last_name", "first_name", "phone", "pricelist"},
 *         @SWG\Property(
 *             property="id",
@@ -61,7 +62,8 @@ use App\Rating;
 *         ),
 *         @SWG\Property(
 *             property="avg_rating",
-*             type="float"
+*             type="number",
+*             format="float"
 *         ),
 *         @SWG\Property(
 *             property="active",
@@ -69,12 +71,14 @@ use App\Rating;
 *         ),
 *         @SWG\Property(
 *             property="created_at",
-*             type="dateTime",
+*              type="string",
+*              format="date-time",
 *             readOnly=true
 *         ),
 *         @SWG\Property(
 *             property="updated_at",
-*             type="dateTime",
+*              type="string",
+*              format="date-time",
 *             readOnly=true
 *         ),
 *         @SWG\Property(
@@ -87,6 +91,18 @@ use App\Rating;
 *             type="array",
 *             @SWG\Items(ref="#/definitions/profession")
 *         ),
+*     )
+*/
+
+
+/**
+*     @SWG\Definition(
+*         definition="mastoriPost",
+*         allOf={@SWG\Schema(ref="#definitions/mastori")},
+*          @SWG\Property(
+*              property="password_repeat",
+*              type="string"
+*          )
 *     )
 */
 

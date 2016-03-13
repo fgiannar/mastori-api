@@ -29,6 +29,43 @@ use Swagger\Annotations as SWG;
  */
 
 
+ /**
+ *     @SWG\Definition(
+ *         definition="fieldValidationDescription",
+ *         @SWG\Property(
+ *             property="error_description",
+ *             type="string",
+  *         )
+ *     )
+ */
+
+ /**
+ *     @SWG\Definition(
+ *         definition="validationerror",
+ *         @SWG\Property(
+ *             property="fieldName",
+ *             type="array",
+ *             @SWG\Items(ref="#/definitions/fieldValidationDescription")
+ *         )
+ *     )
+ */
+
+ /**
+ *     @SWG\Definition(
+ *         definition="validationsErrorsModel",
+ *         required={"errors"},
+ *         @SWG\Property(
+ *             property="errors",
+ *             type="array",
+ *             @SWG\Items(ref="#/definitions/validationerror")
+ *         )
+ *     )
+ */
+
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Routes File
