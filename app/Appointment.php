@@ -5,6 +5,40 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
+//@todo fix available_datetimes
+/**
+*     @SWG\Definition(
+*         definition="appointmentPost",
+*         required={"issue", "available_datetimes", "deadline", "additional_comments", "mastori_id", "address_id"},
+*         @SWG\Property(
+*             property="issue",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="available_datetimes",
+*             type="string",
+*         ),
+*         @SWG\Property(
+*             property="additional_comments",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="deadline",
+*             type="string",
+*             format="date-time",
+*         ),
+*         @SWG\Property(
+*             property="mastori_id",
+*             type= "integer"
+*         ),
+*         @SWG\Property(
+*             property="address_id",
+*             type= "integer"
+*         )
+*     )
+*/
+
+
 /**
 *     @SWG\Definition(
 *         definition="appointment",

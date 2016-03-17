@@ -18,7 +18,7 @@
                     "appointments"
                 ],
                 "description": "Returns all the appointments of the auth user",
-                "operationId": "getAppointements",
+                "operationId": "getAppointments",
                 "produces": [
                     "application/json"
                 ],
@@ -43,6 +43,125 @@
                     },
                     "400": {
                         "description": "token_not_provided",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "appointments"
+                ],
+                "description": "Adds a new appointment in database",
+                "operationId": "addAppointment",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/appointmentPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created appointment object",
+                        "schema": {
+                            "$ref": "#/definitions/appointment"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Authenticates a user",
+                "operationId": "authenticate",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/credentialsModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns access token",
+                        "schema": {
+                            "$ref": "#/definitions/tokenModel"
+                        }
+                    },
+                    "401": {
+                        "description": "invalid credentials",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/facebook": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Authenticates a user via facebook",
+                "operationId": "fbAuthenticate",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fbObj"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns access token",
+                        "schema": {
+                            "$ref": "#/definitions/tokenModel"
+                        }
+                    },
+                    "500": {
+                        "description": "could_not_create_token",
                         "schema": {
                             "$ref": "#/definitions/errorModel"
                         }
@@ -398,6 +517,190 @@
                 }
             }
         },
+        "/professions": {
+            "get": {
+                "tags": [
+                    "professions"
+                ],
+                "description": "Returns all the professions",
+                "operationId": "getprofessions",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All professions response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/profession"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "professions"
+                ],
+                "description": "Adds a new profession in database",
+                "operationId": "addProfession",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/profession"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created profession object",
+                        "schema": {
+                            "$ref": "#/definitions/profession"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/professions/{id}": {
+            "put": {
+                "tags": [
+                    "professions"
+                ],
+                "description": "Edits a professions",
+                "operationId": "editprofession",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of profession to update",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/profession"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Professions response",
+                        "schema": {
+                            "$ref": "#/definitions/profession"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "professions"
+                ],
+                "description": "Delete a profession",
+                "operationId": "deleteprofession",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of profession to delete",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Cannot be deleted.",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
         "/ratings": {
             "get": {
                 "tags": [
@@ -595,6 +898,37 @@
                 }
             }
         },
+        "appointmentPost": {
+            "required": [
+                "issue",
+                "available_datetimes",
+                "deadline",
+                "additional_comments",
+                "mastori_id",
+                "address_id"
+            ],
+            "properties": {
+                "issue": {
+                    "type": "string"
+                },
+                "available_datetimes": {
+                    "type": "string"
+                },
+                "additional_comments": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "mastori_id": {
+                    "type": "integer"
+                },
+                "address_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "appointment": {
             "required": [
                 "id",
@@ -725,6 +1059,48 @@
                     "items": {
                         "$ref": "#/definitions/address"
                     }
+                }
+            }
+        },
+        "credentialsModel": {
+            "required": [
+                "email, username, password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "tokenModel": {
+            "required": [
+                "token"
+            ],
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "fbObj": {
+            "required": [
+                "code, clientId, redirectUri"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "clientId": {
+                    "type": "string"
+                },
+                "redirectUri": {
+                    "type": "string"
                 }
             }
         },

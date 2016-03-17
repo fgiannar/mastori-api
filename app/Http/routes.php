@@ -28,7 +28,6 @@ use Swagger\Annotations as SWG;
  *     )
  */
 
-
  /**
  *     @SWG\Definition(
  *         definition="fieldValidationDescription",
@@ -61,9 +60,6 @@ use Swagger\Annotations as SWG;
  *         )
  *     )
  */
-
-
-
 
 
 /*

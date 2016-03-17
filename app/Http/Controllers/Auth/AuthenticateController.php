@@ -18,12 +18,91 @@ class AuthenticateController extends Controller
 {
     private $claims;
 
+    /**
+    *     @SWG\Definition(
+    *         definition="credentialsModel",
+    *         required={"email, username, password"},
+    *         @SWG\Property(
+    *             property="email",
+    *             type="string"
+    *         ),
+    *         @SWG\Property(
+    *             property="username",
+    *             type="string"
+    *         ),
+    *         @SWG\Property(
+    *             property="password",
+    *             type="string"
+    *         )
+    *     )
+    */
+
+    /**
+    *     @SWG\Definition(
+    *         definition="tokenModel",
+    *         required={"token"},
+    *         @SWG\Property(
+    *             property="token",
+    *             type="string"
+    *         )
+    *     )
+    */
+
+    /**
+    *     @SWG\Definition(
+    *         definition="fbObj",
+    *         required={"code, clientId, redirectUri"},
+    *         @SWG\Property(
+    *             property="code",
+    *             type="string"
+    *         ),
+    *         @SWG\Property(
+    *             property="clientId",
+    *             type="string"
+    *         ),
+    *         @SWG\Property(
+    *             property="redirectUri",
+    *             type="string"
+    *         )
+    *     )
+    */
+
+
     // TODO Change this for production (claims should NOT expire in a week)
     public function __construct()
     {
         $this->claims = array('exp' => time() + (7 * 24 * 60 * 60));
     }
 
+
+
+    /**
+     * @SWG\Post(
+     *     path="/auth",
+     *     operationId="authenticate",
+     *     tags={"auth"},
+     *     description="Authenticates a user",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/credentialsModel")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Returns access token",
+     *         @SWG\Schema(ref="#/definitions/tokenModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="invalid credentials",
+     *         @SWG\Schema(
+     *             ref="#/definitions/errorModel"
+     *         )
+     *     ),
+     * )
+     */
     public function authenticate(Request $request)
     {
         // grab credentials from the request
@@ -46,6 +125,34 @@ class AuthenticateController extends Controller
         return response()->json(compact('token'));
     }
 
+
+    /**
+     * @SWG\Post(
+     *     path="/auth/facebook",
+     *     operationId="fbAuthenticate",
+     *     tags={"auth"},
+     *     description="Authenticates a user via facebook",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/fbObj")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Returns access token",
+     *         @SWG\Schema(ref="#/definitions/tokenModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="500",
+     *         description="could_not_create_token",
+     *         @SWG\Schema(
+     *             ref="#/definitions/errorModel"
+     *         )
+     *     ),
+     * )
+     */
     /**
      * Login with Facebook.
      */

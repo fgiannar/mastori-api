@@ -20,7 +20,7 @@ class AppointmentController extends Controller
    * @SWG\Get(
    *     path="/appointments",
    *     description="Returns all the appointments of the auth user",
-   *     operationId="getAppointements",
+   *     operationId="getAppointments",
    *     tags={"appointments"},
    *     produces={"application/json"},
    *     @SWG\Parameter(
@@ -77,6 +77,47 @@ class AppointmentController extends Controller
         return $appointments->paginate($request->input('per_page'));
     }
 
+
+
+    /**
+     * @SWG\Post(
+     *     path="/appointments",
+     *     operationId="addAppointment",
+     *     tags={"appointments"},
+     *     description="Adds a new appointment in database",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Access token",
+     *         in="header",
+     *         name="Authorization",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/appointmentPost")
+     *     ),
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Returns created appointment object",
+     *         @SWG\Schema(ref="#/definitions/appointment")
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="validation errors",
+     *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="token_not_provided/token_invalid/Unauthorized",
+     *         @SWG\Schema(
+     *             ref="#/definitions/errorModel"
+     *         )
+     *     )
+     * )
+     */
     /**
      * Store a newly created resource in storage.
      *
