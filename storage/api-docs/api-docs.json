@@ -50,6 +50,180 @@
                 }
             }
         },
+        "/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "Returns all the end users",
+                "operationId": "getEndUsers",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All end users response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/endUser"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "token_not_provided",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "description": "Adds a new end user in database",
+                "operationId": "addEndUser",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/endUserPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created end user object",
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "description": "Edits an end user",
+                "operationId": "editenduser",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of end user to update",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/endUserPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "End user response",
+                        "schema": {
+                            "$ref": "#/definitions/endUser"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/favorites": {
+            "post": {
+                "tags": [
+                    "favorites"
+                ],
+                "description": "Adds a mastori into favorite list",
+                "operationId": "addFavorite",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mastoriId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
         "/mastoria": {
             "get": {
                 "tags": [
@@ -116,7 +290,7 @@
                     "400": {
                         "description": "validation errors",
                         "schema": {
-                            "$ref": "#/definitions/errorModel"
+                            "$ref": "#/definitions/validationsErrorsModel"
                         }
                     }
                 }
@@ -136,7 +310,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of mastorito get",
+                        "description": "ID of mastori to get",
                         "required": true,
                         "type": "integer"
                     },
@@ -155,20 +329,14 @@
                             "$ref": "#/definitions/mastori"
                         }
                     },
-                    "400": {
-                        "description": "unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/errorModel"
-                        }
-                    },
                     "404": {
-                        "description": "no found",
+                        "description": "not found",
                         "schema": {
                             "$ref": "#/definitions/errorModel"
                         }
                     },
-                    "500": {
-                        "description": "error",
+                    "400": {
+                        "description": "token_not_provided/token_invalid",
                         "schema": {
                             "$ref": "#/definitions/errorModel"
                         }
@@ -216,7 +384,7 @@
                         }
                     },
                     "401": {
-                        "description": "unauthorized",
+                        "description": "token_not_provided/token_invalid",
                         "schema": {
                             "$ref": "#/definitions/errorModel"
                         }
@@ -259,10 +427,122 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "token_not_provided",
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
                         "schema": {
                             "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/mastoria/{mastori_id}/ratings": {
+            "post": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Adds a new rating in database",
+                "operationId": "addRating",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "mastori_id",
+                        "in": "path",
+                        "description": "ID of mastori to rate",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rating_post"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created rating object",
+                        "schema": {
+                            "$ref": "#/definitions/rating"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/ratings/{id}": {
+            "put": {
+                "tags": [
+                    "ratings"
+                ],
+                "description": "Edits a rating",
+                "operationId": "editrating",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of rating to update",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rating_post"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rating response",
+                        "schema": {
+                            "$ref": "#/definitions/rating"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
                         }
                     }
                 }
@@ -412,6 +692,42 @@
                 }
             }
         },
+        "endUserPost": {
+            "required": [
+                "name",
+                "email",
+                "phone",
+                "password",
+                "password_repeat",
+                "addresses"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "password_repeat": {
+                    "type": "string"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/address"
+                    }
+                }
+            }
+        },
         "errorModel": {
             "required": [
                 "error"
@@ -546,6 +862,13 @@
                 }
             ]
         },
+        "mastoriId": {
+            "properties": {
+                "mastori_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "profession": {
             "required": [
                 "tag",
@@ -626,6 +949,20 @@
                 }
             }
         },
+        "rating_post": {
+            "required": [
+                "rating",
+                "body"
+            ],
+            "properties": {
+                "rating": {
+                    "type": "integer"
+                },
+                "body": {
+                    "type": "string"
+                }
+            }
+        },
         "userShortInfo": {
             "required": [
                 "name",
@@ -638,6 +975,16 @@
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "idObj": {
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         }

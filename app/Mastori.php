@@ -106,6 +106,16 @@ use App\Rating;
 *     )
 */
 
+/**
+*     @SWG\Definition(
+*         definition="mastoriId",
+*          @SWG\Property(
+*              property="mastori_id",
+*              type="integer"
+*          )
+*     )
+*/
+
 class Mastori extends Model
 {
     use \Heroicpixels\Filterable\FilterableTrait;

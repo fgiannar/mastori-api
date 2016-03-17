@@ -34,6 +34,44 @@ class FavoriteController extends Controller
     }
 
     /**
+     * @SWG\Post(
+     *     path="/favorites",
+     *     operationId="addFavorite",
+     *     tags={"favorites"},
+     *     description="Adds a mastori into favorite list",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Access token",
+     *         in="header",
+     *         name="Authorization",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/mastoriId")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="validation errors",
+     *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="token_not_provided/token_invalid/Unauthorized",
+     *         @SWG\Schema(
+     *             ref="#/definitions/errorModel"
+     *         )
+     *     ),
+     * )
+     */
+    /**
      * Attach a mastori to current user as favorite.
      *
      * @param  \Illuminate\Http\Request  $request

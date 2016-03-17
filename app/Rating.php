@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-//@todo add mastori and user to model definition
+
 /**
 *     @SWG\Definition(
 *         definition="rating",
@@ -57,6 +57,23 @@ use DB;
 *     )
 */
 
+
+/**
+*     @SWG\Definition(
+*         definition="rating_post",
+*         required={ "rating", "body"},
+*         @SWG\Property(
+*             property="rating",
+*             type="integer"
+*         ),
+*         @SWG\Property(
+*             property="body",
+*             type="string"
+*         )
+*     )
+*/
+
+
 /**
 *     @SWG\Definition(
 *         definition="userShortInfo",
@@ -69,6 +86,18 @@ use DB;
 *         @SWG\Property(
 *             property="name",
 *             type="string"
+*         )
+*     )
+*/
+
+
+/**
+*     @SWG\Definition(
+*         definition="idObj",
+*         required={ "id"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer"
 *         )
 *     )
 */

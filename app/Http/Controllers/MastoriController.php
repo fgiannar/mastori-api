@@ -93,7 +93,7 @@ class MastoriController extends Controller
    *     @SWG\Response(
    *         response="400",
    *         description="validation errors",
-   *         @SWG\Schema(ref="#/definitions/errorModel")
+   *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
    *     )
    * )
    */
@@ -140,7 +140,7 @@ class MastoriController extends Controller
     *@SWG\Get(
     *     path="/mastoria/{id}",
     *     @SWG\Parameter(
-    *         description="ID of mastorito get",
+    *         description="ID of mastori to get",
     *         in="path",
     *         name="id",
     *         required=true,
@@ -163,19 +163,16 @@ class MastoriController extends Controller
     *         @SWG\Schema(ref="#/definitions/mastori")
     *     ),
     *     @SWG\Response(
-    *         response="400",
-    *         description="unauthorized",
-    *         @SWG\Schema(ref="#/definitions/errorModel")
-    *     ),
-    *     @SWG\Response(
     *         response="404",
-    *         description="no found",
+    *         description="not found",
     *         @SWG\Schema(ref="#/definitions/errorModel")
     *     ),
     *     @SWG\Response(
-    *         response="500",
-    *         description="error",
-    *         @SWG\Schema(ref="#/definitions/errorModel")
+    *         response="400",
+    *         description="token_not_provided/token_invalid",
+    *         @SWG\Schema(
+    *             ref="#/definitions/errorModel"
+    *         )
     *     )
     * )
     */
@@ -229,8 +226,10 @@ class MastoriController extends Controller
     *     ),
     *     @SWG\Response(
     *         response="401",
-    *         description="unauthorized",
-    *         @SWG\Schema(ref="#/definitions/errorModel")
+    *         description="token_not_provided/token_invalid",
+    *         @SWG\Schema(
+    *             ref="#/definitions/errorModel"
+    *         )
     *     ),
     *     @SWG\Response(
     *         response="400",
