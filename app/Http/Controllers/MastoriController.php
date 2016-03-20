@@ -56,10 +56,18 @@ class MastoriController extends Controller
             'offers'    => 'offers',
             'avg_rating' => 'avg_rating',
             'profession' => 'mastoria_professions.profession_id',
+            'area' => 'mastoria_areas.area_id',
             'created_at' => 'created_at'
         ];
 
-        $mastoria = Mastori::join('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id')->filterColumns($filterColumns)->select('mastoria.*');
+        $mastoria = Mastori::join('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id');
+
+        if ($request->input('area') !== null){
+            $mastoria->join('mastoria_areas', 'mastoria.id', '=', 'mastoria_areas.mastori_id');
+        }
+
+        $mastoria->filterColumns($filterColumns)->select('mastoria.*');
+
         if ($request->input('q')) {
             $mastoria = $mastoria->q($request->input('q'));
         }
