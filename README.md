@@ -27,6 +27,7 @@ server this is not required.
     vi .env # set at least database values (also FACEBOOK_ID and FACEBOOK_SECRET for FB related functionalities to work)
     php artisan key:generate
     php artisan migrate:refresh --seed
+    php artisan php artisan l5-swagger:publish  (to publish swagger docs in api/documentation path)
 
 __Configure Web Server__ to proper root directory
 
