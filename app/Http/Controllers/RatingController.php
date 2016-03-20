@@ -17,11 +17,38 @@ use Auth;
 
 class RatingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+  /**
+   * @SWG\Get(
+   *     path="/ratings",
+   *     description="Returns all the ratings",
+   *     operationId="getRatings",
+   *     tags={"ratings"},
+   *     produces={"application/json"},
+   *     @SWG\Parameter(
+   *         description="Access token",
+   *         in="header",
+   *         name="Authorization",
+   *         required=true,
+   *         type="string"
+   *     ),
+   *     @SWG\Response(
+   *         response=200,
+   *         description="All ratings response",
+   *         @SWG\Schema(
+   *             type="array",
+   *             @SWG\Items(ref="#/definitions/rating")
+   *         ),
+   *     ),
+   *     @SWG\Response(
+   *         response="401",
+   *         description="token_not_provided/token_invalid",
+   *         @SWG\Schema(
+   *             ref="#/definitions/errorModel"
+   *         )
+   *     )
+   * )
+   */
     public function index(Request $request)
     {
         $filterColumns = [
@@ -39,6 +66,54 @@ class RatingController extends Controller
         return $ratings->paginate($request->input('per_page'));
     }
 
+
+
+    /**
+     * @SWG\Post(
+     *     path="/mastoria/{mastori_id}/ratings",
+     *     operationId="addRating",
+     *     tags={"mastoria"},
+     *     description="Adds a new rating in database",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Access token",
+     *         in="header",
+     *         name="Authorization",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="ID of mastori to rate",
+     *         in="path",
+     *         name="mastori_id",
+     *         required=true,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/rating_post")
+     *     ),
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Returns created rating object",
+     *         @SWG\Schema(ref="#/definitions/rating")
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="validation errors",
+     *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="token_not_provided/token_invalid/Unauthorized",
+     *         @SWG\Schema(
+     *             ref="#/definitions/errorModel"
+     *         )
+     *     ),
+     * )
+     */
     /**
      * Store a newly created resource in storage.
      *
@@ -69,6 +144,52 @@ class RatingController extends Controller
         return response($rating, 201);
     }
 
+    /**
+      *@SWG\Put(
+      *     path="/ratings/{id}",
+      *     @SWG\Parameter(
+      *         description="ID of rating to update",
+      *         in="path",
+      *         name="id",
+      *         required=true,
+      *         type="integer"
+      *     ),
+      *     @SWG\Parameter(
+      *         description="Access token",
+      *         in="header",
+      *         name="Authorization",
+      *         required=true,
+      *         type="string"
+      *     ),
+      *     operationId="editrating",
+      *     tags={"ratings"},
+      *     description="Edits a rating",
+      *     produces={"application/json"},
+      *     @SWG\Parameter(
+      *         name="body",
+      *         in="body",
+      *         required=true,
+      *         @SWG\Schema(ref="#/definitions/rating_post")
+      *     ),
+      *     @SWG\Response(
+      *         response=200,
+      *         description="Rating response",
+      *         @SWG\Schema(ref="#/definitions/rating")
+      *     ),
+      *     @SWG\Response(
+      *         response="401",
+      *         description="token_not_provided/token_invalid",
+      *         @SWG\Schema(
+      *             ref="#/definitions/errorModel"
+      *         )
+      *     ),
+      *     @SWG\Response(
+      *         response="400",
+      *         description="validation errors",
+      *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+      *     )
+      * )
+      */
     /**
      * Update the specified resource in storage.
      *

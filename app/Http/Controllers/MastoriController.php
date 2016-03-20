@@ -13,13 +13,41 @@ use App\User;
 
 use Auth;
 
+
+
 class MastoriController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  /**
+   * @SWG\Get(
+   *     path="/mastoria",
+   *     description="Returns all the mastoria",
+   *     operationId="getMastoria",
+   *     tags={"mastoria"},
+   *     produces={"application/json"},
+   *     @SWG\Parameter(
+   *         description="Access token",
+   *         in="header",
+   *         name="Authorization",
+   *         required=true,
+   *         type="string"
+   *     ),
+   *     @SWG\Response(
+   *         response=200,
+   *         description="All mastoria response",
+   *         @SWG\Schema(
+   *             type="array",
+   *             @SWG\Items(ref="#/definitions/mastori")
+   *         ),
+   *     ),
+   *     @SWG\Response(
+   *         response="400",
+   *         description="token_not_provided",
+   *         @SWG\Schema(
+   *             ref="#/definitions/errorModel"
+   *         )
+   *     )
+   * )
+   */
     public function index(Request $request)
     {
         $filterColumns = [
@@ -48,16 +76,34 @@ class MastoriController extends Controller
         return $mastoria->with('user')->with('professions')->paginate($request->input('per_page'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+  /**
+   * @SWG\Post(
+   *     path="/mastoria",
+   *     operationId="addMastori",
+   *     tags={"mastoria"},
+   *     description="Adds a new mastori in database",
+   *     produces={"application/json"},
+   *     @SWG\Parameter(
+   *         name="body",
+   *         in="body",
+   *         required=true,
+   *         @SWG\Schema(ref="#/definitions/mastoriPost")
+   *     ),
+   *     @SWG\Response(
+   *         response=201,
+   *         description="Returns created Mastori object",
+   *         @SWG\Schema(ref="#/definitions/mastori")
+   *     ),
+   *     @SWG\Response(
+   *         response="400",
+   *         description="validation errors",
+   *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+   *     )
+   * )
+   */
     public function store(Request $request)
     {
         $data = $request->all();
-
         $validator = $this->validator($data);
         if ($validator->fails()) {
             return response(['errors' => $validator->messages()], 400);
@@ -91,6 +137,49 @@ class MastoriController extends Controller
         return response($newMastori->load('user')->load('professions'), 201);
     }
 
+
+
+
+  /**
+    *@SWG\Get(
+    *     path="/mastoria/{id}",
+    *     @SWG\Parameter(
+    *         description="ID of mastori to get",
+    *         in="path",
+    *         name="id",
+    *         required=true,
+    *         type="integer"
+    *     ),
+    *     @SWG\Parameter(
+    *         description="Access token",
+    *         in="header",
+    *         name="Authorization",
+    *         required=true,
+    *         type="string"
+    *     ),
+    *     operationId="getmastori",
+    *     tags={"mastoria"},
+    *     description="Fetches a mastori",
+    *     produces={"application/json"},
+    *     @SWG\Response(
+    *         response=200,
+    *         description="Mastori response",
+    *         @SWG\Schema(ref="#/definitions/mastori")
+    *     ),
+    *     @SWG\Response(
+    *         response="404",
+    *         description="not found",
+    *         @SWG\Schema(ref="#/definitions/errorModel")
+    *     ),
+    *     @SWG\Response(
+    *         response="400",
+    *         description="token_not_provided/token_invalid",
+    *         @SWG\Schema(
+    *             ref="#/definitions/errorModel"
+    *         )
+    *     )
+    * )
+    */
     /**
      * Display the specified resource.
      *
@@ -103,6 +192,56 @@ class MastoriController extends Controller
         return Mastori::findOrFail($id)->load('user');
     }
 
+
+
+
+
+  /**
+    *@SWG\Put(
+    *     path="/mastoria/{id}",
+    *     @SWG\Parameter(
+    *         description="ID of mastori to update",
+    *         in="path",
+    *         name="id",
+    *         required=true,
+    *         type="integer"
+    *     ),
+    *     @SWG\Parameter(
+    *         description="Access token",
+    *         in="header",
+    *         name="Authorization",
+    *         required=true,
+    *         type="string"
+    *     ),
+    *     operationId="editmastori",
+    *     tags={"mastoria"},
+    *     description="Edits a mastori",
+    *     produces={"application/json"},
+    *     @SWG\Parameter(
+    *         name="body",
+    *         in="body",
+    *         required=true,
+    *         @SWG\Schema(ref="#/definitions/mastori")
+    *     ),
+    *     @SWG\Response(
+    *         response=200,
+    *         description="Mastori response",
+    *         @SWG\Schema(ref="#/definitions/mastori")
+    *     ),
+    *     @SWG\Response(
+    *         response="401",
+    *         description="token_not_provided/token_invalid",
+    *         @SWG\Schema(
+    *             ref="#/definitions/errorModel"
+    *         )
+    *     ),
+    *     @SWG\Response(
+    *         response="400",
+    *         description="validation errors",
+    *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+    *     )
+    * )
+    */
     /**
      * Update the specified resource in storage.
      *

@@ -5,6 +5,117 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Rating;
 
+/**
+*     @SWG\Definition(
+*         definition="mastori",
+*         type="object",
+*         required={"username", "email", "password", "last_name", "first_name", "phone", "pricelist"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="username",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="email",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="password",
+*             type="string",
+*             format="password"
+*         ),
+*         @SWG\Property(
+*             property="last_name",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="first_name",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="paratsoukli",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="facebook_id",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="phone",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="description",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="pricelist",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="avg_response_time",
+*             type="integer"
+*         ),
+*         @SWG\Property(
+*             property="avg_rating",
+*             type="number",
+*             format="float"
+*         ),
+*         @SWG\Property(
+*             property="active",
+*             type="integer"
+*         ),
+*         @SWG\Property(
+*             property="created_at",
+*              type="string",
+*              format="date-time",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="updated_at",
+*              type="string",
+*              format="date-time",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="addresses",
+*             type="array",
+*             @SWG\Items(ref="#/definitions/address")
+*         ),
+*         @SWG\Property(
+*             property="professions",
+*             type="array",
+*             @SWG\Items(ref="#/definitions/profession")
+*         ),
+*     )
+*/
+
+
+/**
+*     @SWG\Definition(
+*         definition="mastoriPost",
+*         allOf={@SWG\Schema(ref="#definitions/mastori")},
+*          @SWG\Property(
+*              property="password_repeat",
+*              type="string"
+*          )
+*     )
+*/
+
+/**
+*     @SWG\Definition(
+*         definition="mastoriId",
+*          @SWG\Property(
+*              property="mastori_id",
+*              type="integer"
+*          )
+*     )
+*/
+
 class Mastori extends Model
 {
     use \Heroicpixels\Filterable\FilterableTrait;

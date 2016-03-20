@@ -15,6 +15,38 @@ use Auth;
 
 class AppointmentController extends Controller
 {
+
+  /**
+   * @SWG\Get(
+   *     path="/appointments",
+   *     description="Returns all the appointments of the auth user",
+   *     operationId="getAppointments",
+   *     tags={"appointments"},
+   *     produces={"application/json"},
+   *     @SWG\Parameter(
+   *         description="Access token",
+   *         in="header",
+   *         name="Authorization",
+   *         required=true,
+   *         type="string"
+   *     ),
+   *     @SWG\Response(
+   *         response=200,
+   *         description="All users appointments response",
+   *         @SWG\Schema(
+   *             type="array",
+   *             @SWG\Items(ref="#/definitions/appointment")
+   *         ),
+   *     ),
+   *     @SWG\Response(
+   *         response="400",
+   *         description="token_not_provided",
+   *         @SWG\Schema(
+   *             ref="#/definitions/errorModel"
+   *         )
+   *     )
+   * )
+   */
     /**
      * Display a listing of the resource.
      *
@@ -45,6 +77,47 @@ class AppointmentController extends Controller
         return $appointments->paginate($request->input('per_page'));
     }
 
+
+
+    /**
+     * @SWG\Post(
+     *     path="/appointments",
+     *     operationId="addAppointment",
+     *     tags={"appointments"},
+     *     description="Adds a new appointment in database",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Access token",
+     *         in="header",
+     *         name="Authorization",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/appointmentPost")
+     *     ),
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Returns created appointment object",
+     *         @SWG\Schema(ref="#/definitions/appointment")
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="validation errors",
+     *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="token_not_provided/token_invalid/Unauthorized",
+     *         @SWG\Schema(
+     *             ref="#/definitions/errorModel"
+     *         )
+     *     )
+     * )
+     */
     /**
      * Store a newly created resource in storage.
      *
@@ -87,6 +160,54 @@ class AppointmentController extends Controller
         return Appointment::with('address')->with('user')->with('mastori')->findOrFail($id);
     }
 
+
+
+    /**
+     * @SWG\Patch(
+     *     path="/appointments/{appointment_id}",
+     *     operationId="editAppointment",
+     *     tags={"appointments"},
+     *     description="Edits an appointment in database",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Access token",
+     *         in="header",
+     *         name="Authorization",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="ID of appointement to edit",
+     *         in="path",
+     *         name="appointment_id",
+     *         required=true,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/appointmentPost")
+     *     ),
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Returns edited appointment object",
+     *         @SWG\Schema(ref="#/definitions/appointment")
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="validation errors",
+     *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="token_not_provided/token_invalid/Unauthorized",
+     *         @SWG\Schema(
+     *             ref="#/definitions/errorModel"
+     *         )
+     *     )
+     * )
+     */
     /**
      * Update appointment status
      *

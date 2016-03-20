@@ -5,6 +5,103 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
+
+/**
+*     @SWG\Definition(
+*         definition="rating",
+*         required={"id", "rating", "editing_expires_at", "body", "status", "enduser", "mastori"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="rating",
+*             type="integer"
+*         ),
+*         @SWG\Property(
+*             property="editing_expires_at",
+*             type="string",
+*             format="date-time",
+*         ),
+*         @SWG\Property(
+*             property="body",
+*             type="string"
+*         ),
+*         @SWG\Property(
+*             property="status",
+*             type="string",
+*             enum={ "pending", "approved", "cancelled"},
+*             default="pending"
+*         ),
+*         @SWG\Property(
+*             property="mastori",
+*             ref= "#/definitions/userShortInfo"
+*         ),
+*         @SWG\Property(
+*             property="user",
+*             ref= "#/definitions/userShortInfo"
+*         ),
+*         @SWG\Property(
+*             property="created_at",
+*              type="string",
+*              format="date-time",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="updated_at",
+*              type="string",
+*              format="date-time",
+*             readOnly=true
+*         ),
+*     )
+*/
+
+
+/**
+*     @SWG\Definition(
+*         definition="rating_post",
+*         required={ "rating", "body"},
+*         @SWG\Property(
+*             property="rating",
+*             type="integer"
+*         ),
+*         @SWG\Property(
+*             property="body",
+*             type="string"
+*         )
+*     )
+*/
+
+
+/**
+*     @SWG\Definition(
+*         definition="userShortInfo",
+*         required={"name", "id"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer",
+*             readOnly=true
+*         ),
+*         @SWG\Property(
+*             property="name",
+*             type="string"
+*         )
+*     )
+*/
+
+
+/**
+*     @SWG\Definition(
+*         definition="idObj",
+*         required={ "id"},
+*         @SWG\Property(
+*             property="id",
+*             type="integer"
+*         )
+*     )
+*/
+
 class Rating extends Model
 {
 

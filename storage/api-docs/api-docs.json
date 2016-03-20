@@ -1,0 +1,1575 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Mastori Api specification",
+        "description": "",
+        "contact": {
+            "email": "giannaropoulou.foteini@gmail.com;tania.pets@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/appointments": {
+            "get": {
+                "tags": [
+                    "appointments"
+                ],
+                "description": "Returns all the appointments of the auth user",
+                "operationId": "getAppointments",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All users appointments response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/appointment"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "token_not_provided",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "appointments"
+                ],
+                "description": "Adds a new appointment in database",
+                "operationId": "addAppointment",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/appointmentPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created appointment object",
+                        "schema": {
+                            "$ref": "#/definitions/appointment"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/appointments/{appointment_id}": {
+            "patch": {
+                "tags": [
+                    "appointments"
+                ],
+                "description": "Edits an appointment in database",
+                "operationId": "editAppointment",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "appointment_id",
+                        "in": "path",
+                        "description": "ID of appointement to edit",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/appointmentPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns edited appointment object",
+                        "schema": {
+                            "$ref": "#/definitions/appointment"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Authenticates a user",
+                "operationId": "authenticate",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/credentialsModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns access token",
+                        "schema": {
+                            "$ref": "#/definitions/tokenModel"
+                        }
+                    },
+                    "401": {
+                        "description": "invalid credentials",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/facebook": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Authenticates a user via facebook",
+                "operationId": "fbAuthenticate",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/fbObj"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns access token",
+                        "schema": {
+                            "$ref": "#/definitions/tokenModel"
+                        }
+                    },
+                    "500": {
+                        "description": "could_not_create_token",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/unlink": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Unlinks a facebook account",
+                "operationId": "unlinkfb",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/providerModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "$ref": "#/definitions/tokenModel"
+                        }
+                    },
+                    "404": {
+                        "description": "user not found",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "Returns all the end users",
+                "operationId": "getEndUsers",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All end users response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/endUser"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "token_not_provided",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "description": "Adds a new end user in database",
+                "operationId": "addEndUser",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/endUserPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created end user object",
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "description": "Edits an end user",
+                "operationId": "editenduser",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of end user to update",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/endUserPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "End user response",
+                        "schema": {
+                            "$ref": "#/definitions/endUser"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/favorites": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "Gets an end user's favorite mastoria",
+                "operationId": "getUserFavorites",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of end user",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns favorite mastoria",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/mastori"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/favorites": {
+            "post": {
+                "tags": [
+                    "favorites"
+                ],
+                "description": "Adds a mastori into favorite list",
+                "operationId": "addFavorite",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mastoriId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/favorites/{mastori_id}": {
+            "delete": {
+                "tags": [
+                    "favorites"
+                ],
+                "description": "Removes a mastori from favorites list",
+                "operationId": "removefavorite",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "mastori_id",
+                        "in": "path",
+                        "description": "id of mastori to be removed",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Cannot be deleted.",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/mastoria": {
+            "get": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Returns all the mastoria",
+                "operationId": "getMastoria",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All mastoria response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/mastori"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "token_not_provided",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Adds a new mastori in database",
+                "operationId": "addMastori",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mastoriPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created Mastori object",
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/mastoria/{id}": {
+            "get": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Fetches a mastori",
+                "operationId": "getmastori",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of mastori to get",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mastori response",
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "400": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Edits a mastori",
+                "operationId": "editmastori",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of mastori to update",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Mastori response",
+                        "schema": {
+                            "$ref": "#/definitions/mastori"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/professions": {
+            "get": {
+                "tags": [
+                    "professions"
+                ],
+                "description": "Returns all the professions",
+                "operationId": "getprofessions",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All professions response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/profession"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "professions"
+                ],
+                "description": "Adds a new profession in database",
+                "operationId": "addProfession",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/profession"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created profession object",
+                        "schema": {
+                            "$ref": "#/definitions/profession"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/professions/{id}": {
+            "put": {
+                "tags": [
+                    "professions"
+                ],
+                "description": "Edits a professions",
+                "operationId": "editprofession",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of profession to update",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/profession"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Professions response",
+                        "schema": {
+                            "$ref": "#/definitions/profession"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "professions"
+                ],
+                "description": "Delete a profession",
+                "operationId": "deleteprofession",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of profession to delete",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Cannot be deleted.",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/ratings": {
+            "get": {
+                "tags": [
+                    "ratings"
+                ],
+                "description": "Returns all the ratings",
+                "operationId": "getRatings",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All ratings response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/rating"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/mastoria/{mastori_id}/ratings": {
+            "post": {
+                "tags": [
+                    "mastoria"
+                ],
+                "description": "Adds a new rating in database",
+                "operationId": "addRating",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "mastori_id",
+                        "in": "path",
+                        "description": "ID of mastori to rate",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rating_post"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns created rating object",
+                        "schema": {
+                            "$ref": "#/definitions/rating"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/ratings/{id}": {
+            "put": {
+                "tags": [
+                    "ratings"
+                ],
+                "description": "Edits a rating",
+                "operationId": "editrating",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of rating to update",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rating_post"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rating response",
+                        "schema": {
+                            "$ref": "#/definitions/rating"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "address": {
+            "required": [
+                "lat",
+                "lng",
+                "address",
+                "city",
+                "country"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "lat": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "lng": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "friendly_name": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                }
+            }
+        },
+        "appointmentPost": {
+            "required": [
+                "issue",
+                "available_datetimes",
+                "deadline",
+                "additional_comments",
+                "mastori_id",
+                "address_id"
+            ],
+            "properties": {
+                "issue": {
+                    "type": "string"
+                },
+                "available_datetimes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "additional_comments": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "mastori_id": {
+                    "type": "integer"
+                },
+                "address_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "appointment": {
+            "required": [
+                "id",
+                "issue",
+                "available_datetimes",
+                "deadline",
+                "additional_comments",
+                "status",
+                "mastori",
+                "user",
+                "address"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "issue": {
+                    "type": "string"
+                },
+                "available_datetimes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "additional_comments": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "status": {
+                    "type": "string",
+                    "default": "pending",
+                    "enum": [
+                        "pending",
+                        "approved",
+                        "cancelled"
+                    ]
+                },
+                "mastori": {
+                    "$ref": "#/definitions/userShortInfo"
+                },
+                "user": {
+                    "$ref": "#/definitions/userShortInfo"
+                },
+                "address": {
+                    "$ref": "#/definitions/address"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                }
+            }
+        },
+        "endUser": {
+            "required": [
+                "name",
+                "phone"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "favorites": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/mastori"
+                    }
+                }
+            }
+        },
+        "endUserPost": {
+            "required": [
+                "name",
+                "email",
+                "phone",
+                "password",
+                "password_repeat",
+                "addresses"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "password_repeat": {
+                    "type": "string"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/address"
+                    }
+                }
+            }
+        },
+        "credentialsModel": {
+            "required": [
+                "email, username, password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "tokenModel": {
+            "required": [
+                "token"
+            ],
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "providerModel": {
+            "required": [
+                "provider"
+            ],
+            "properties": {
+                "provider": {
+                    "type": "string"
+                }
+            }
+        },
+        "fbObj": {
+            "required": [
+                "code, clientId, redirectUri"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "clientId": {
+                    "type": "string"
+                },
+                "redirectUri": {
+                    "type": "string"
+                }
+            }
+        },
+        "errorModel": {
+            "required": [
+                "error"
+            ],
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "readOnly": true
+                }
+            }
+        },
+        "fieldValidationDescription": {
+            "properties": {
+                "error_description": {
+                    "type": "string"
+                }
+            }
+        },
+        "validationerror": {
+            "properties": {
+                "fieldName": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/fieldValidationDescription"
+                    }
+                }
+            }
+        },
+        "validationsErrorsModel": {
+            "required": [
+                "errors"
+            ],
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/validationerror"
+                    }
+                }
+            }
+        },
+        "mastori": {
+            "required": [
+                "username",
+                "email",
+                "password",
+                "last_name",
+                "first_name",
+                "phone",
+                "pricelist"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "username": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "paratsoukli": {
+                    "type": "string"
+                },
+                "facebook_id": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "pricelist": {
+                    "type": "string"
+                },
+                "avg_response_time": {
+                    "type": "integer"
+                },
+                "avg_rating": {
+                    "type": "number",
+                    "format": "float"
+                },
+                "active": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/address"
+                    }
+                },
+                "professions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/profession"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "mastoriPost": {
+            "properties": {
+                "password_repeat": {
+                    "type": "string"
+                }
+            },
+            "allOf": [
+                {
+                    "$ref": "#definitions/mastori"
+                }
+            ]
+        },
+        "mastoriId": {
+            "properties": {
+                "mastori_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "profession": {
+            "required": [
+                "tag",
+                "title"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "tag": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                }
+            }
+        },
+        "rating": {
+            "required": [
+                "id",
+                "rating",
+                "editing_expires_at",
+                "body",
+                "status",
+                "enduser",
+                "mastori"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "editing_expires_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "body": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "default": "pending",
+                    "enum": [
+                        "pending",
+                        "approved",
+                        "cancelled"
+                    ]
+                },
+                "mastori": {
+                    "$ref": "#/definitions/userShortInfo"
+                },
+                "user": {
+                    "$ref": "#/definitions/userShortInfo"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                }
+            }
+        },
+        "rating_post": {
+            "required": [
+                "rating",
+                "body"
+            ],
+            "properties": {
+                "rating": {
+                    "type": "integer"
+                },
+                "body": {
+                    "type": "string"
+                }
+            }
+        },
+        "userShortInfo": {
+            "required": [
+                "name",
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "idObj": {
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

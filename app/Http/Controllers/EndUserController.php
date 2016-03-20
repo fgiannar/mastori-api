@@ -15,6 +15,38 @@ use Auth;
 
 class EndUserController extends Controller
 {
+
+  /**
+   * @SWG\Get(
+   *     path="/users",
+   *     description="Returns all the end users",
+   *     operationId="getEndUsers",
+   *     tags={"users"},
+   *     produces={"application/json"},
+   *     @SWG\Parameter(
+   *         description="Access token",
+   *         in="header",
+   *         name="Authorization",
+   *         required=true,
+   *         type="string"
+   *     ),
+   *     @SWG\Response(
+   *         response=200,
+   *         description="All end users response",
+   *         @SWG\Schema(
+   *             type="array",
+   *             @SWG\Items(ref="#/definitions/endUser")
+   *         ),
+   *     ),
+   *     @SWG\Response(
+   *         response="400",
+   *         description="token_not_provided",
+   *         @SWG\Schema(
+   *             ref="#/definitions/errorModel"
+   *         )
+   *     )
+   * )
+   */
     /**
      * Display a listing of the resource.
      *
@@ -30,6 +62,33 @@ class EndUserController extends Controller
         return EndUser::with('user')->filterColumns($filterColumns)->paginate($request->input('per_page'));
     }
 
+
+
+    /**
+     * @SWG\Post(
+     *     path="/users",
+     *     operationId="addEndUser",
+     *     tags={"users"},
+     *     description="Adds a new end user in database",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/endUserPost")
+     *     ),
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Returns created end user object",
+     *         @SWG\Schema(ref="#/definitions/mastori")
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="validation errors",
+     *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+     *     )
+     * )
+     */
     /**
      * Store a newly created resource in storage.
      *
@@ -80,6 +139,54 @@ class EndUserController extends Controller
         return EndUser::findOrFail($id)->load('user');
     }
 
+
+
+    /**
+      *@SWG\Put(
+      *     path="/users/{id}",
+      *     @SWG\Parameter(
+      *         description="ID of end user to update",
+      *         in="path",
+      *         name="id",
+      *         required=true,
+      *         type="integer"
+      *     ),
+      *     @SWG\Parameter(
+      *         description="Access token",
+      *         in="header",
+      *         name="Authorization",
+      *         required=true,
+      *         type="string"
+      *     ),
+      *     operationId="editenduser",
+      *     tags={"users"},
+      *     description="Edits an end user",
+      *     produces={"application/json"},
+      *     @SWG\Parameter(
+      *         name="body",
+      *         in="body",
+      *         required=true,
+      *         @SWG\Schema(ref="#/definitions/endUserPost")
+      *     ),
+      *     @SWG\Response(
+      *         response=200,
+      *         description="End user response",
+      *         @SWG\Schema(ref="#/definitions/endUser")
+      *     ),
+      *     @SWG\Response(
+      *         response="401",
+      *         description="token_not_provided/token_invalid",
+      *         @SWG\Schema(
+      *             ref="#/definitions/errorModel"
+      *         )
+      *     ),
+      *     @SWG\Response(
+      *         response="400",
+      *         description="validation errors",
+      *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+      *     )
+      * )
+      */
     /**
      * Update the specified resource in storage.
      *
