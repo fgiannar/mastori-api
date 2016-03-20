@@ -73,7 +73,7 @@ class MastoriController extends Controller
             $mastoria = $mastoria->active();
         }
 
-        return $mastoria->with('user')->with('professions')->paginate($request->input('per_page'));
+        return $mastoria->with('user')->with('professions')->with('areas')->paginate($request->input('per_page'));
     }
 
   /**
@@ -115,6 +115,8 @@ class MastoriController extends Controller
 
         $addresses = $data['addresses'];
         $professions = array_pluck($data['professions'], 'id');
+        $areas = isset($data['areas']) ? array_pluck($data['areas'], 'id') : [];
+
         $data = array_except($data, ['password_repeat', 'addresses', 'professions']);
         $userdata = array_only($data, ['email', 'username', 'password']);
         $mastoridata = array_except($data, ['email', 'username', 'password']);
@@ -134,7 +136,11 @@ class MastoriController extends Controller
         // Sync professions
         $newMastori->professions()->sync($professions);
 
-        return response($newMastori->load('user')->load('professions'), 201);
+
+        //atach areas that mastori serves
+        $newMastori->areas()->sync($areas);
+
+        return response($newMastori->load('user')->load('professions')->load('areas'), 201);
     }
 
 
@@ -189,7 +195,7 @@ class MastoriController extends Controller
     public function show($id)
     {
         // TODO Add check if mastori is active if NOT admin
-        return Mastori::findOrFail($id)->load('user');
+        return Mastori::findOrFail($id)->load('user')->load('professions')->load('areas');
     }
 
 
@@ -266,6 +272,8 @@ class MastoriController extends Controller
 
         $addresses = $data['addresses'];
         $professions = array_pluck($data['professions'], 'id');
+        $areas = isset($data['areas']) ? array_pluck($data['areas'], 'id') : [];
+
         $data = array_except($data, ['password_repeat', 'addresses', 'professions']);
         $userdata = array_only($data, ['email', 'username', 'password']);
         $mastoridata = array_except($data, ['email', 'username', 'password']);
@@ -286,6 +294,10 @@ class MastoriController extends Controller
         }
         // Sync professions
         $mastori->professions()->sync($professions);
+
+        //update serving areas
+        $mastori->areas()->sync($areas);
+
 
         return $mastori->load('professions');
     }
@@ -330,7 +342,9 @@ class MastoriController extends Controller
             'addresses.*.city' => 'required|max:255',
             'addresses.*.country' => 'required|max:255',
             'professions' => 'required|array|min:1|max:5',
-            'professions.*.id'  => 'required|exists:professions,id'
+            'professions.*.id'  => 'required|exists:professions,id',
+            'areas' => 'array',
+            'areas.*.id'  => 'exists:areas,id'
         ]);
     }
 }

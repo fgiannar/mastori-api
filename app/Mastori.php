@@ -91,6 +91,11 @@ use App\Rating;
 *             type="array",
 *             @SWG\Items(ref="#/definitions/profession")
 *         ),
+*         @SWG\Property(
+*             property="areas",
+*             type="array",
+*             @SWG\Items(ref="#/definitions/area")
+*         ),
 *     )
 */
 
@@ -163,6 +168,16 @@ class Mastori extends Model
     {
         return $this->belongsToMany('App\Profession', 'mastoria_professions');
     }
+
+
+    /**
+    * Get the areas that mastori serves
+    */
+    public function areas()
+    {
+        return $this->belongsToMany('App\Area', 'mastoria_areas');
+    }
+
 
     /**
     * Override toArray function
