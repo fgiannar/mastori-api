@@ -97,6 +97,62 @@
                 }
             }
         },
+        "/appointments/{appointment_id}": {
+            "patch": {
+                "tags": [
+                    "appointments"
+                ],
+                "description": "Edits an appointment in database",
+                "operationId": "editAppointment",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "appointment_id",
+                        "in": "path",
+                        "description": "ID of appointement to edit",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/appointmentPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Returns edited appointment object",
+                        "schema": {
+                            "$ref": "#/definitions/appointment"
+                        }
+                    },
+                    "400": {
+                        "description": "validation errors",
+                        "schema": {
+                            "$ref": "#/definitions/validationsErrorsModel"
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
         "/auth": {
             "post": {
                 "tags": [
@@ -162,6 +218,49 @@
                     },
                     "500": {
                         "description": "could_not_create_token",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/unlink": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Unlinks a facebook account",
+                "operationId": "unlinkfb",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/providerModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "$ref": "#/definitions/tokenModel"
+                        }
+                    },
+                    "404": {
+                        "description": "user not found",
                         "schema": {
                             "$ref": "#/definitions/errorModel"
                         }
@@ -297,6 +396,51 @@
                 }
             }
         },
+        "/users/{user_id}/favorites": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "description": "Gets an end user's favorite mastoria",
+                "operationId": "getUserFavorites",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "ID of end user",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns favorite mastoria",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/mastori"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
         "/favorites": {
             "post": {
                 "tags": [
@@ -336,6 +480,51 @@
                     },
                     "401": {
                         "description": "token_not_provided/token_invalid/Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/favorites/{mastori_id}": {
+            "delete": {
+                "tags": [
+                    "favorites"
+                ],
+                "description": "Removes a mastori from favorites list",
+                "operationId": "removefavorite",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "mastori_id",
+                        "in": "path",
+                        "description": "id of mastori to be removed",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "token_not_provided/token_invalid",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Cannot be deleted.",
                         "schema": {
                             "$ref": "#/definitions/errorModel"
                         }
@@ -912,7 +1101,11 @@
                     "type": "string"
                 },
                 "available_datetimes": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
                 },
                 "additional_comments": {
                     "type": "string"
@@ -950,7 +1143,11 @@
                     "type": "string"
                 },
                 "available_datetimes": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
                 },
                 "additional_comments": {
                     "type": "string"
@@ -1084,6 +1281,16 @@
             ],
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "providerModel": {
+            "required": [
+                "provider"
+            ],
+            "properties": {
+                "provider": {
                     "type": "string"
                 }
             }

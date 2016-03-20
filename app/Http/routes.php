@@ -122,7 +122,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('favorites', ['middleware' => ['roles:enduser'], 'uses' => 'FavoriteController@add']);
     Route::delete('favorites/{mastori_id}', ['middleware' => ['roles:enduser'], 'uses' => 'FavoriteController@remove']);
     // Unlink social account (up to now Facabook)
-    Route::post('auth/unlink', 'AuthenticateController@unlink');
+    Route::post('auth/unlink', 'Auth\AuthenticateController@unlink');
   });
 
 });

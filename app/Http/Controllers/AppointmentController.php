@@ -160,6 +160,54 @@ class AppointmentController extends Controller
         return Appointment::with('address')->with('user')->with('mastori')->findOrFail($id);
     }
 
+
+
+    /**
+     * @SWG\Patch(
+     *     path="/appointments/{appointment_id}",
+     *     operationId="editAppointment",
+     *     tags={"appointments"},
+     *     description="Edits an appointment in database",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Access token",
+     *         in="header",
+     *         name="Authorization",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="ID of appointement to edit",
+     *         in="path",
+     *         name="appointment_id",
+     *         required=true,
+     *         type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/appointmentPost")
+     *     ),
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Returns edited appointment object",
+     *         @SWG\Schema(ref="#/definitions/appointment")
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="validation errors",
+     *         @SWG\Schema(ref="#/definitions/validationsErrorsModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="token_not_provided/token_invalid/Unauthorized",
+     *         @SWG\Schema(
+     *             ref="#/definitions/errorModel"
+     *         )
+     *     )
+     * )
+     */
     /**
      * Update appointment status
      *

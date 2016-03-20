@@ -16,7 +16,8 @@ use DB;
 *         ),
 *         @SWG\Property(
 *             property="available_datetimes",
-*             type="string",
+*             type="array",
+*             @SWG\Items(type="string", format="date-time")
 *         ),
 *         @SWG\Property(
 *             property="additional_comments",
@@ -54,7 +55,8 @@ use DB;
 *         ),
 *         @SWG\Property(
 *             property="available_datetimes",
-*             type="string"
+*             type="array",
+*             @SWG\Items(type="string", format="date-time")
 *         ),
 *         @SWG\Property(
 *             property="additional_comments",

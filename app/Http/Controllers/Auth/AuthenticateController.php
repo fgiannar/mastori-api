@@ -48,6 +48,18 @@ class AuthenticateController extends Controller
     *     )
     */
 
+
+    /**
+    *     @SWG\Definition(
+    *         definition="providerModel",
+    *         required={"provider"},
+    *         @SWG\Property(
+    *             property="provider",
+    *             type="string"
+    *         )
+    *     )
+    */
+
     /**
     *     @SWG\Definition(
     *         definition="fbObj",
@@ -227,6 +239,42 @@ class AuthenticateController extends Controller
         }
     }
 
+
+
+    /**
+     * @SWG\Post(
+     *     path="/auth/unlink",
+     *     @SWG\Parameter(
+     *         description="Access token",
+     *         in="header",
+     *         name="Authorization",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     operationId="unlinkfb",
+     *     tags={"auth"},
+     *     description="Unlinks a facebook account",
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/providerModel")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Ok",
+     *         @SWG\Schema(ref="#/definitions/tokenModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="user not found",
+     *         @SWG\Schema(
+     *             ref="#/definitions/errorModel"
+     *         )
+     *     )
+     * )
+     */
     /**
      * Unlink Facebook.
      */
