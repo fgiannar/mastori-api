@@ -70,10 +70,6 @@ use Illuminate\Database\Eloquent\Model;
 *             type="string"
 *         ),
 *         @SWG\Property(
-*             property="photo",
-*             type="string"
-*         ),
-*         @SWG\Property(
 *             property="addresses",
 *             type="array",
 *             @SWG\Items(ref="#/definitions/address")
