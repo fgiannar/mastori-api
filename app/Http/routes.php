@@ -125,4 +125,6 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('auth/unlink', 'Auth\AuthenticateController@unlink');
   });
 
+  Route::get('test', 'TestController@test');
+
 });
