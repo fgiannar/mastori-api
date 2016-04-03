@@ -106,6 +106,8 @@ Route::group(['middleware' => ['api']], function () {
     // TODO admin only
     Route::resource('users', 'EndUserController', ['only' => ['index', 'show']]);
     Route::put('users/{id}', ['middleware' => ['roles:enduser'], 'uses' => 'EndUserController@update']);
+    //Route::get('users/mobileactivate', 'EndUserController@mobileactivate');
+
     // Ratings
     Route::get('ratings', 'RatingController@index');
     Route::post('mastoria/{mastori_id}/ratings', ['middleware' => ['roles:enduser'], 'uses' => 'RatingController@store']);

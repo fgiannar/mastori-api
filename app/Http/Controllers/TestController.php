@@ -18,9 +18,9 @@ class TestController extends Controller
     {
     //  $nexmo_sms = new \NexmoMessage('api_key', 'api_secret');
       $smsService = new NexmoSmsService();
-      //$sent = $smsService->send( '+306937078135', 'tania', 'σκατά ελληνικά και ψδωμά@δσδ' );
-      $receive = $smsService->receive();
-      dd($receive);
+      $sent = $smsService->send( '+306937078135', 'tania', 'σκατά ελληνικά και ψδωμά@δσδ' );
+      //$receive = $smsService->receive();
+      dd($sent);
     }
 
 
