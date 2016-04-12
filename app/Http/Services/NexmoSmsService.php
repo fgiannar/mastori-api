@@ -3,7 +3,9 @@
 namespace App\Http\Services;
 use Config;
 
-
+/**
+*@to do add sms logging system
+*/
 class NexmoSmsService
 {
 
@@ -15,7 +17,8 @@ class NexmoSmsService
 
   public function send($receiver, $sender, $text) {
       $smsService = new \NexmoMessage(Config::get('services.nexmo.api_key'), Config::get('services.nexmo.api_secret'));
-      return $this->nexmoMessage->sendText( $receiver, $sender, $text );
+      $sent =  $this->nexmoMessage->sendText( $receiver, $sender, $text );
+      return $sent->messages[0]->status == 0;
   }
 
   //@todo need to rent a number

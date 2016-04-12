@@ -14,7 +14,7 @@ class CreateVerificationCodesTable extends Migration
     {
       Schema::create('verification_codes', function (Blueprint $table) {
           $table->increments('id');
-          $table->integer('code')->unique();
+          $table->string('code', 5);
           $table->integer('user_id')->unsigned();
           $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
           $table->dateTime('expiration');
