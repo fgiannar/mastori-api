@@ -14,6 +14,7 @@ use App\Rating;
 use App\Mastori;
 
 use Auth;
+use Config;
 
 class RatingController extends Controller
 {
@@ -97,7 +98,7 @@ class RatingController extends Controller
      *     ),
      *     @SWG\Response(
      *         response=201,
-     *         description="Returns created rating object",
+     *         description="Returns created rating object with points rewarded",
      *         @SWG\Schema(ref="#/definitions/rating")
      *     ),
      *     @SWG\Response(
@@ -140,6 +141,11 @@ class RatingController extends Controller
         // Update mastori average rating
         $mastori['avg_rating'] = $mastori->ratings()->avg('rating');
         $mastori->save();
+
+        // Reward user for rating
+        $points = Config::get('services.points.review');
+        Auth::user()->userable->addPoints($points, 'Review for mastori ' . $mastori_id);
+        $rating['points_rewarded'] = $points;
 
         return response($rating, 201);
     }

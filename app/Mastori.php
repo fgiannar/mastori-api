@@ -3,6 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Trexology\Pointable\Contracts\Pointable;
+use Trexology\Pointable\Traits\Pointable as PointableTrait;
+
 use App\Rating;
 
 /**
@@ -121,8 +124,9 @@ use App\Rating;
 *     )
 */
 
-class Mastori extends Model
+class Mastori extends Model implements Pointable
 {
+    use PointableTrait;
     use \Heroicpixels\Filterable\FilterableTrait;
 
     /**

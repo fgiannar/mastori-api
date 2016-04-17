@@ -9,6 +9,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Services\NexmoSmsService;
 
+use App\EndUser;
+
 use Config;
 
 class TestController extends Controller
@@ -21,6 +23,22 @@ class TestController extends Controller
       $sent = $smsService->send( '+306937078135', 'tania', 'σκατά ελληνικά και ψδωμά@δσδ' );
       //$receive = $smsService->receive();
       dd($sent);
+    }
+
+    public function testpoints()
+    {
+    	$endUser = EndUser::first();
+			$amount = 10; // (Double) Can be a negative value
+			$message = "The reason for this transaction";
+
+			//Optional (if you modify the point_transaction table)
+			$data = [
+			    // 'ref_id' => 'someReferId',
+			];
+
+			$transaction = $endUser->addPoints($amount,$message,$data);
+
+			return $endUser->load('user');
     }
 
 

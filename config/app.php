@@ -159,7 +159,8 @@ return [
         GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
         Heroicpixels\Filterable\FilterableServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
-        \L5Swagger\L5SwaggerServiceProvider::class
+        \L5Swagger\L5SwaggerServiceProvider::class,
+        Trexology\Pointable\PointableServiceProvider::class
 
     ],
 

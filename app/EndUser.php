@@ -2,6 +2,9 @@
 
 namespace App;
 
+use Trexology\Pointable\Contracts\Pointable;
+use Trexology\Pointable\Traits\Pointable as PointableTrait;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -80,9 +83,10 @@ use Illuminate\Database\Eloquent\Model;
 
 
 
-class EndUser extends Model
+class EndUser extends Model implements Pointable
 {
 
+  use PointableTrait;
   use \Heroicpixels\Filterable\FilterableTrait;
 
   /**
@@ -124,6 +128,8 @@ class EndUser extends Model
     public function toArray()
     {
         $array = parent::toArray();
+
+        $array['points'] = $this->currentPoints();
 
         if (isset($array['user'])) {
           $array['username'] = $this->user->username;

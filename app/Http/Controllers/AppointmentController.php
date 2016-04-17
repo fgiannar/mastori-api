@@ -12,6 +12,7 @@ use App\Appointment;
 use App\Address;
 
 use Auth;
+use Config;
 
 class AppointmentController extends Controller
 {
@@ -101,7 +102,7 @@ class AppointmentController extends Controller
      *     ),
      *     @SWG\Response(
      *         response=201,
-     *         description="Returns created appointment object",
+     *         description="Returns created appointment object with points rewarded",
      *         @SWG\Schema(ref="#/definitions/appointment")
      *     ),
      *     @SWG\Response(
@@ -145,6 +146,11 @@ class AppointmentController extends Controller
 
         // Insert related address
         $newAppointment->address()->associate($address);
+
+        // Reward user for online appointment
+        $points = Config::get('services.points.online_appointment');
+        Auth::user()->userable->addPoints($points, 'Online appointment');
+        $newAppointment['points_rewarded'] = $points;
 
         return response($newAppointment->load('address')->load('mastori'), 201);
     }

@@ -19,7 +19,8 @@
         "barryvdh/laravel-cors": "^0.8.0",
         "guzzlehttp/guzzle": "^6.1",
         "darkaonline/l5-swagger": "~3.0",
-        "prawnsalad/nexmo": "@dev"
+        "prawnsalad/nexmo": "@dev",
+        "trexology/pointable": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
