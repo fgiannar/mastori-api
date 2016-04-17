@@ -104,9 +104,11 @@ Route::group(['middleware' => ['api']], function () {
     Route::put('mastoria/{id}', ['middleware' => ['roles:mastori'], 'uses' => 'MastoriController@update']);
     // Users
     // TODO admin only
+    Route::get('users/sendverificationcode', 'UsersController@sendVerificationCode'); //sends sms with the code
+    Route::get('users/verifycode', 'UsersController@verifyCode');//sends the code to system for verification
+
     Route::resource('users', 'EndUserController', ['only' => ['index', 'show']]);
     Route::put('users/{id}', ['middleware' => ['roles:enduser'], 'uses' => 'EndUserController@update']);
-    //Route::get('users/mobileactivate', 'EndUserController@mobileactivate');
 
     // Ratings
     Route::get('ratings', 'RatingController@index');
