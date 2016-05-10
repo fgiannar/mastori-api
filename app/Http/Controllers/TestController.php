@@ -13,16 +13,24 @@ use App\EndUser;
 
 use Config;
 
+use Mail;
+
 class TestController extends Controller
 {
 
     public function test()
     {
+      $data = ['test' => 'test'];
+      Mail::send('emails.demo', $data, function($message)
+      {
+          
+          $message->to('tania.pets@gmail.com', 'Jane Doe')->subject('This is a demo!');
+      });
     //  $nexmo_sms = new \NexmoMessage('api_key', 'api_secret');
-      $smsService = new NexmoSmsService();
-      $sent = $smsService->send( '+306937078135', 'tania', 'σκατά ελληνικά και ψδωμά@δσδ' );
-      //$receive = $smsService->receive();
-      dd($sent);
+      // $smsService = new NexmoSmsService();
+      // $sent = $smsService->send( '+306937078135', 'tania', 'σκατά ελληνικά και ψδωμά@δσδ' );
+      // //$receive = $smsService->receive();
+      // dd($sent);
     }
 
     public function testpoints()
