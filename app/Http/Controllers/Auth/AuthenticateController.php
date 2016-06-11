@@ -10,7 +10,7 @@ use GuzzleHttp;
 use GuzzleHttp\Exception\ClientException;
 use App\Http\Controllers\Controller;
 use Config;
-
+use Auth;
 use App\EndUser;
 use App\User;
 
@@ -133,8 +133,10 @@ class AuthenticateController extends Controller
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
 
+        $user = Auth::user();
+
         // all good so return the token
-        return response()->json(compact('token'));
+        return response()->json(compact('token', 'user'));
     }
 
 

@@ -17,11 +17,12 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next)
     {
-        if (!JWTAuth::getToken()) {
-            return $next($request);
-        }
-
-
-        return response('Uanuthorized. Allowed only not authenticated users.', 401);
+        return $next($request);
+        // if (!JWTAuth::getToken()) {
+        //     return $next($request);
+        // }
+        //
+        //
+        // return response('Uanuthorized. Allowed only not authenticated users.', 401);
     }
 }
