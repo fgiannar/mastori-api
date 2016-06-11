@@ -98,6 +98,8 @@ Route::group(['middleware' => ['api']], function () {
   // FB Auth
   Route::post('auth/facebook', ['uses' => 'Auth\AuthenticateController@facebook']);
 
+  Route::resource('professions', 'ProfessionController', ['only' => ['index']]);
+
   Route::group(['middleware' => ['jwt.auth'/*, 'jwt.refresh'*/]], function() {
     // Mastoria
     Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show']]);
@@ -115,7 +117,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::post('mastoria/{mastori_id}/ratings', ['middleware' => ['roles:enduser'], 'uses' => 'RatingController@store']);
     Route::put('ratings/{rating_id}', ['middleware' => ['roles:enduser'], 'uses' => 'RatingController@update']);
     // Professions
-    Route::resource('professions', 'ProfessionController', ['only' => ['index', 'store', 'update', 'destroy']]);
+    Route::resource('professions', 'ProfessionController', ['only' => ['store', 'update', 'destroy']]);
     // Appointments
     Route::get('appointments', 'AppointmentController@index');
     // Route::get('appointments/{appointment_id}', 'AppointmentController@show');
