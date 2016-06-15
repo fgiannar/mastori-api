@@ -77,7 +77,7 @@ class MastoriController extends Controller
         if ($request->input('near')) {
             $mastoria = $mastoria->near($request->input('near'), $request->input('radius'));
         }
-        if (Auth::user()->userable_type !== 'App\Admin') {
+        if (Auth::guest() || Auth::user()->userable_type !== 'App\Admin') {
             $mastoria = $mastoria->active();
         }
 

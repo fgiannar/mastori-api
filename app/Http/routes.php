@@ -97,12 +97,12 @@ Route::group(['middleware' => ['api']], function () {
   Route::post('auth', ['middleware' => ['guest'], 'uses' => 'Auth\AuthenticateController@authenticate']);
   // FB Auth
   Route::post('auth/facebook', ['uses' => 'Auth\AuthenticateController@facebook']);
-
+  // Professions
   Route::resource('professions', 'ProfessionController', ['only' => ['index']]);
+  // Mastoria
+  Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show']]);
 
   Route::group(['middleware' => ['jwt.auth'/*, 'jwt.refresh'*/]], function() {
-    // Mastoria
-    Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show']]);
     Route::put('mastoria/{id}', ['middleware' => ['roles:mastori'], 'uses' => 'MastoriController@update']);
     // Users
     // TODO admin only
