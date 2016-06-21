@@ -13,9 +13,62 @@
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->email,
-        'password' => bcrypt(str_random(10)),
+        'username' => $faker->unique()->userName,
+        'email' => $faker->unique()->email,
+        'password' => bcrypt('password'),
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->defineAs(App\User::class, 'enduser', function (Faker\Generator $faker) use ($factory) {
+
+    $user = $factory->raw(App\User::class);
+
+    return array_merge($user, [
+        'userable_type' => 'App\EndUser',
+        'userable_id' => function () {
+            return factory(App\EndUser::class)->create()->id;
+        }
+    ]);
+});
+
+
+$factory->defineAs(App\User::class, 'mastori', function (Faker\Generator $faker) use ($factory) {
+
+    $user = $factory->raw(App\User::class);
+
+    return array_merge($user, [
+        'userable_type' => 'App\Mastori',
+        'userable_id' => function () {
+            return factory(App\Mastori::class)->create()->id;
+        }
+    ]);
+});
+
+
+$factory->define(App\EndUser::class, function ($faker) {
+    return [
+        'name' => $faker->name,
+        'phone' => $faker->phoneNumber
+    ];
+});
+
+$factory->define(App\Mastori::class, function ($faker) {
+    return [
+        'last_name' => $faker->lastName,
+        'first_name' => $faker->firstName,
+        'phone' => $faker->unique()->phoneNumber,
+        'description' => $faker->text(),
+        'active' => true
+    ];
+});
+
+$factory->define(App\Address::class, function ($faker) {
+    return [
+        'lat' => $faker->latitude,
+        'lng' => $faker->longitude,
+        'address' => $faker->address,
+        'city' => $faker->city,
+        'country' => $faker->country
     ];
 });
