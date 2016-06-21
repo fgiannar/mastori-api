@@ -54,11 +54,14 @@ $factory->define(App\EndUser::class, function ($faker) {
 });
 
 $factory->define(App\Mastori::class, function ($faker) {
+
     return [
         'last_name' => $faker->lastName,
         'first_name' => $faker->firstName,
         'phone' => $faker->unique()->phoneNumber,
         'description' => $faker->text(),
+        'offers' => rand(0, 1) == 1 ? $faker->text() : null,
+        'avg_rating' => rand(1, 5),
         'active' => true
     ];
 });
