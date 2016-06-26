@@ -39,3 +39,12 @@ Last thing is to make sure that Apache's `mod_rewrite` is enabled and that
 
     a2enmod rewrite
     service apache2 restart
+
+__SEEDING__
+
+    php artisan db:seed
+
+Will populate the DB with 500 mastoria and 500 end users. Both mastoria and end users will have random addresses.
+Mastoria will also have random professions and areas they serve.
+Areas are populated based on the _greece-prefectures.geojson_ found in database/seeds/data.
+Professions are populated based on the _professions.json_ found in database/seeds/data.
