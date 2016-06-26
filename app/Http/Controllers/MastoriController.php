@@ -60,13 +60,13 @@ class MastoriController extends Controller
             'created_at' => 'created_at'
         ];
 
-        $mastoria = Mastori::join('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id');
+        $mastoria = Mastori::leftJoin('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id');
 
         if ($request->input('area') !== null){
-            $mastoria->join('mastoria_areas', 'mastoria.id', '=', 'mastoria_areas.mastori_id');
+            $mastoria->leftJoin('mastoria_areas', 'mastoria.id', '=', 'mastoria_areas.mastori_id');
         }
 
-        $mastoria->filterColumns($filterColumns)->select('mastoria.*');
+        $mastoria->filterColumns($filterColumns)->groupBy('mastoria.id')->select('mastoria.*');
 
         if ($request->input('q')) {
             $mastoria = $mastoria->q($request->input('q'));
