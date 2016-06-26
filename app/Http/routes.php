@@ -99,6 +99,8 @@ Route::group(['middleware' => ['api']], function () {
   Route::post('auth/facebook', ['uses' => 'Auth\AuthenticateController@facebook']);
   // Professions
   Route::resource('professions', 'ProfessionController', ['only' => ['index']]);
+    // Areas
+  Route::resource('areas', 'AreaController', ['only' => ['index']]);
   // Mastoria
   Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show']]);
 
