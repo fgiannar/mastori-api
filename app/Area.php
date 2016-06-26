@@ -31,6 +31,8 @@ class Area extends Model {
    */
   protected $table = 'areas';
 
+  public $timestamps = false;
+
   /**
    * The attributes that are mass assignable.
    *
@@ -44,6 +46,41 @@ class Area extends Model {
    * @var array
    */
   protected $hidden = ['polygon'];
+
+  /**
+   * Override save method to add geolocation column
+   *
+   */
+  public function setPolygonAttribute($coords) {
+       foreach ($coords as $polygons){
+            $arrPoly = array();
+            foreach ($polygons as $poly) {
+
+                if (is_array($poly[0])) { // MultiPolygon
+                    $arrPoly = array();
+                    foreach ($poly as $point){
+                        $lat = strval($point[0]);
+                        $lng = strval($point[1]);
+                        $latLng = $lat . ' ' . $lng;
+                        array_push($arrPoly, $latLng);
+                    }
+                } else { // Polygon
+                    $point = $poly;
+                    $lat = strval($point[0]);
+                    $lng = strval($point[1]);
+                    $latLng = $lat . ' ' . $lng;
+                    array_push($arrPoly, $latLng);
+                }
+            }
+
+            $coordsArray[] = '(' . implode($arrPoly, ',') . ')';
+        }
+
+        $coordsStr = implode(',', $coordsArray);
+
+        $this->attributes['polygon'] = DB::raw("ST_PolygonFromText('POLYGON($coordsStr)')");
+    }
+
 
 
    /**
