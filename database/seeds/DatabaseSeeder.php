@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 
         $this->call(ProfessionTableSeeder::class);
+        $this->call(AreaTableSeeder::class);
         $this->call(EndUserTableSeeder::class);
         $this->call(MastoriTableSeeder::class);
 
@@ -45,7 +46,10 @@ class MastoriTableSeeder extends Seeder {
         DB::table('mastoria')->delete();
 
         factory(App\User::class, 'mastori', 500)->create()->each(function($u) {
-            $u->userable->professions()->sync([1]);
+            $randProfessions = array_rand(App\Profession::all()->lists('id', 'id')->toArray(), 2);
+            $randAreas = array_rand(App\Area::all()->lists('id', 'id')->toArray(), 2);
+            $u->userable->professions()->sync($randProfessions);
+            $u->userable->areas()->sync($randAreas);
             $u->addresses()->save(factory(App\Address::class)->make());
         });
     }
@@ -56,11 +60,34 @@ class ProfessionTableSeeder extends Seeder {
 
     public function run()
     {
-        // DB::table('professions')->delete();
+        DB::table('mastoria_professions')->delete();
+        DB::table('professions')->delete();
 
-        App\Profession::create([
-            'tag' => 'ilektrologos',
-            'title' => 'Hlektrologos'
-        ]);
+        $json = File::get("database/seeds/data/professions.json");
+        $data = json_decode($json);
+        foreach ($data as $profession) {
+            App\Profession::create(array(
+                'tag' => $profession->tag,
+                'title' => $profession->title
+            ));
+        }
+    }
+}
+
+class AreaTableSeeder extends Seeder {
+
+    public function run()
+    {
+        DB::table('mastoria_areas')->delete();
+        DB::table('areas')->delete();
+
+        $json = File::get("database/seeds/data/greece-prefectures.geojson");
+        $data = json_decode($json);
+        foreach ($data->features as $obj) {
+            App\Area::create(array(
+                'name' => $obj->properties->name,
+                'polygon' => $obj->geometry->coordinates
+            ));
+        }
     }
 }
