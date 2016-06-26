@@ -45,7 +45,7 @@ class Area extends Model {
    *
    * @var array
    */
-  protected $hidden = ['polygon'];
+  protected $hidden = ['polygon', 'pivot'];
 
   /**
    * Override save method to add geolocation column
