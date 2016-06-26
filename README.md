@@ -40,7 +40,7 @@ Last thing is to make sure that Apache's `mod_rewrite` is enabled and that
     a2enmod rewrite
     service apache2 restart
 
-__SEEDING__
+## Seeding
 
     php artisan db:seed
 
