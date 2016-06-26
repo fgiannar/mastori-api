@@ -55,6 +55,7 @@ class MastoriController extends Controller
             'last_name' => 'last_name',
             'offers'    => 'offers',
             'avg_rating' => 'avg_rating',
+            'avg_response_time' => 'avg_response_time',
             'profession' => 'mastoria_professions.profession_id',
             'area' => 'mastoria_areas.area_id',
             'created_at' => 'created_at'
