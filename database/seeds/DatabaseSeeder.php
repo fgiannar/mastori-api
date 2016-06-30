@@ -86,7 +86,8 @@ class AreaTableSeeder extends Seeder {
         foreach ($data->features as $obj) {
             App\Area::create(array(
                 'name' => $obj->properties->name,
-                'polygon' => $obj->geometry->coordinates
+                'polygon' => $obj->geometry->coordinates,
+                'geo_json' => $obj->geometry
             ));
         }
     }
