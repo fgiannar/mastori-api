@@ -179,7 +179,7 @@ class Mastori extends Model implements Pointable
     */
     public function areas()
     {
-        return $this->belongsToMany('App\Area', 'mastoria_areas');
+        return $this->belongsToMany('App\Area', 'mastoria_areas')->select(array('areas.id', 'areas.name'));
     }
 
 

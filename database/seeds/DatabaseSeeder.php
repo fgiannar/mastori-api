@@ -78,16 +78,35 @@ class AreaTableSeeder extends Seeder {
 
     public function run()
     {
+
         DB::table('mastoria_areas')->delete();
         DB::table('areas')->delete();
 
-        $json = File::get("database/seeds/data/greece-prefectures.geojson");
+        $json = File::get("database/seeds/data/greece-prefectures/prefectures.json");
         $data = json_decode($json);
         foreach ($data->features as $obj) {
+            if (!$obj->geometry) {
+                continue;
+            }
             App\Area::create(array(
-                'name' => $obj->properties->name,
-                'polygon' => $obj->geometry->coordinates,
-                'geo_json' => $obj->geometry
+                'id' => $obj->properties->ID_2,
+                'name' => $obj->properties->NAME_2,
+                'polygon' => $obj->geometry->coordinates
+                // 'geo_json' => $obj->geometry
+            ));
+        }
+
+        $json = File::get("database/seeds/data/greece-prefectures/areas.json");
+        $data = json_decode($json);
+        foreach ($data->features as $obj) {
+            if (!$obj->geometry) {
+                continue;
+            }
+            App\Area::create(array(
+                'name' => $obj->properties->NAME_3,
+                'parent_id' => $obj->properties->ID_2,
+                'polygon' => $obj->geometry->coordinates
+                // 'geo_json' => $obj->geometry
             ));
         }
     }

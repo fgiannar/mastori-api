@@ -38,7 +38,7 @@ class Area extends Model {
    *
    * @var array
    */
-  protected $fillable = ['name', 'polygon', 'geo_json', 'parent_id'];
+  protected $fillable = ['name', 'polygon', 'parent_id'];
 
   /**
    * The attributes excluded from the model's JSON form.
@@ -84,16 +84,16 @@ class Area extends Model {
     /**
      * Always json_decode geo_json so they are usable
      */
-    public function getGeoJsonAttribute($value) {
-        return json_decode($value);
-    }
+    // public function getGeoJsonAttribute($value) {
+    //     return json_decode($value);
+    // }
 
     /**
      * Always json_encode the geo_json when saving to the database
      */
-    public function setGeoJsonAttribute($value) {
-        $this->attributes['geo_json'] = json_encode($value);
-    }
+    // public function setGeoJsonAttribute($value) {
+    //     $this->attributes['geo_json'] = json_encode($value);
+    // }
 
 
 
