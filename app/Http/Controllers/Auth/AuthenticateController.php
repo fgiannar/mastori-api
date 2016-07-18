@@ -133,7 +133,7 @@ class AuthenticateController extends Controller
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
 
-        $user = Auth::user();
+        $user = Auth::user()->userable->load('user');;
 
         // all good so return the token
         return response()->json(compact('token', 'user'));
