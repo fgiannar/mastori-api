@@ -271,7 +271,7 @@ class AppointmentController extends Controller
     {
         // TODO: When authentication is implemented make sure address belongs to current user
         return Validator::make($data, [
-            'available_datetimes' => 'required|array',
+            'available_datetimes' => 'required|string',
             'deadline' => 'required|date',
             'issue' => 'required',
             'address_id' => 'required|exists:addresses,id,user_id,' . Auth::user()->id,
