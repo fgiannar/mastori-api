@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
+        DB::table('users')->delete();
+
         $this->call(ProfessionTableSeeder::class);
         $this->call(AreaTableSeeder::class);
         $this->call(EndUserTableSeeder::class);
@@ -27,7 +29,6 @@ class EndUserTableSeeder extends Seeder {
 
     public function run()
     {
-        DB::table('users')->delete();
         DB::table('end_users')->delete();
 
         factory(App\User::class, 'enduser', 500)->create()->each(function($u) {
@@ -42,7 +43,6 @@ class MastoriTableSeeder extends Seeder {
 
     public function run()
     {
-        DB::table('users')->delete();
         DB::table('mastoria')->delete();
 
         factory(App\User::class, 'mastori', 500)->create()->each(function($u) {
