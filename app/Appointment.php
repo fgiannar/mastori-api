@@ -137,9 +137,9 @@ class Appointment extends Model
      *
      * @var array
      */
-    protected $casts = [
-        'available_datetimes' => 'array'
-    ];
+    // protected $casts = [
+    //     'available_datetimes' => 'array'
+    // ];
 
     /**
     * Get the mastori of the appointment.
