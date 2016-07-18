@@ -76,7 +76,7 @@ class Address extends Model {
    *
    * @var array
    */
-  protected $hidden = ['user_id', 'id', 'location', 'created_at', 'updated_at'];
+  protected $hidden = ['user_id', 'location', 'created_at', 'updated_at'];
 
   /**
    * Override save method to add geolocation column
