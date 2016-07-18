@@ -103,6 +103,8 @@ Route::group(['middleware' => ['api']], function () {
   Route::resource('areas', 'AreaController', ['only' => ['index']]);
   // Mastoria
   Route::resource('mastoria', 'MastoriController', ['only' => ['index', 'show']]);
+  // Ratings
+  Route::get('ratings', 'RatingController@index');
 
   Route::group(['middleware' => ['jwt.auth'/*, 'jwt.refresh'*/]], function() {
     Route::put('mastoria/{id}', ['middleware' => ['roles:mastori'], 'uses' => 'MastoriController@update']);
@@ -115,7 +117,6 @@ Route::group(['middleware' => ['api']], function () {
     Route::put('users/{id}', ['middleware' => ['roles:enduser'], 'uses' => 'EndUserController@update']);
 
     // Ratings
-    Route::get('ratings', 'RatingController@index');
     Route::post('mastoria/{mastori_id}/ratings', ['middleware' => ['roles:enduser'], 'uses' => 'RatingController@store']);
     Route::put('ratings/{rating_id}', ['middleware' => ['roles:enduser'], 'uses' => 'RatingController@update']);
     // Professions
