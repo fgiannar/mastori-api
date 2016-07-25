@@ -7,7 +7,7 @@ use Validator;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Area;
 use App\Mastori;
 use App\User;
 
@@ -63,8 +63,14 @@ class MastoriController extends Controller
 
         $mastoria = Mastori::leftJoin('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id');
 
-        if ($request->input('area') !== null){
+        if ($request->input('area') !== null || $request->input('userlocation') !==null ){
             $mastoria->leftJoin('mastoria_areas', 'mastoria.id', '=', 'mastoria_areas.mastori_id');
+        }
+
+        //when end user's lat,lng is provided, get mastoria that serve the location
+        /*DOES NOT WORK WHEN AREA IS PROVIDED*/
+        if ($request->input('userlocation')){
+           $mastoria->UserLocation($request->input('userlocation'));
         }
 
         $mastoria->filterColumns($filterColumns)->groupBy('mastoria.id')->select('mastoria.*');

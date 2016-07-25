@@ -105,5 +105,16 @@ class Area extends Model {
         return $this->belongsToMany('App\Mastori', 'mastoria_areas');
     }
 
+    /**
+     * Get area from location (lat,lng)
+     * multiple areas contain the point, get the one with parent (the smaller area)
+     * @param  string, location in format "lat, lng", e.g "22.94924459999993,40.5915073"
+     * @return App\Area
+     */
+    public static function getAreaFromLocation($location) {
+      $query = Area::whereRaw("ST_CONTAINS(`polygon`, POINT($location))")
+                  ->whereNotNull('parent_id');
+      return $query->first();
+    }
 
 }

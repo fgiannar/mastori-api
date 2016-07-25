@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Trexology\Pointable\Contracts\Pointable;
 use Trexology\Pointable\Traits\Pointable as PointableTrait;
-
+use App\Area;
 use App\Rating;
 
 /**
@@ -249,6 +249,19 @@ class Mastori extends Model implements Pointable
         return $query->whereHas('user.addresses', function ($q) use ($bindings) {
           $q->distance($bindings['location'], $bindings['radius']);
         });
+    }
+
+    /**
+     * When user gives his location (e.g landing page), return only the mastoria that
+     * serve the area where the location belongs
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param  string $location (lng, lat)
+     * @return  \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUserLocation($query, $location) {
+      $area  = Area::getAreaFromLocation($location);
+      $areaId = $area ? $area->id : 0;
+      return $query->where('mastoria_areas.area_id', '=', $areaId);
     }
 
 }
