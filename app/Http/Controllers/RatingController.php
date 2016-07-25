@@ -60,7 +60,7 @@ class RatingController extends Controller
         ];
         $ratings = Rating::with('mastori')->with('user')->filterColumns($filterColumns);
 
-        if (Auth::user()->userable_type !== 'App\Admin') {
+        if (Auth::guest() || Auth::user()->userable_type !== 'App\Admin') {
             $ratings = $ratings->approved();
         }
 

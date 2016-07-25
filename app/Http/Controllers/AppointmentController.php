@@ -75,7 +75,7 @@ class AppointmentController extends Controller
                 break;
         }
 
-        return $appointments->paginate($request->input('per_page'));
+        return $appointments->with('rating')->paginate($request->input('per_page'));
     }
 
 

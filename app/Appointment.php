@@ -168,4 +168,12 @@ class Appointment extends Model
         return $this->belongsTo('App\Address');
     }
 
+    /**
+     * Get the rating record associated with the appointment.
+     */
+    public function rating()
+    {
+        return $this->hasOne('App\Rating');
+    }
+
 }

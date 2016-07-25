@@ -115,11 +115,11 @@ class Rating extends Model
     protected $table = 'ratings';
 
     /**
-    * The attributes that are mass assignable.
+    * The attributes that are mass assignable. appointment_id could potentially be null in the future so we are keeping mastori and user references just to be sure...
     *
     * @var array
     */
-    protected $fillable = ['end_user_id', 'mastori_id', 'body', 'rating', 'editing_expires_at', 'status'];
+    protected $fillable = ['end_user_id', 'mastori_id', 'body', 'rating', 'editing_expires_at', 'status', 'appointment_id'];
 
     // protected $guarded = ['editing_expires_at', 'status', 'user_id', 'mastori_id'];
     /**
@@ -127,7 +127,7 @@ class Rating extends Model
     *
     * @var array
     */
-    protected $hidden = ['end_user_id', 'mastori_id'];
+    protected $hidden = ['end_user_id', 'mastori_id', 'appointment_id'];
 
     /**
     * Get the mastori of the rating.
