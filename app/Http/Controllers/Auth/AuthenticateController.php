@@ -132,9 +132,8 @@ class AuthenticateController extends Controller
             // something went wrong whilst attempting to encode the token
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
-
         $user = Auth::user()->userable->load('user');;
-
+        $user->type = Auth::user()->userable_type == 'App\EndUser' ? 'enduser' : 'mastori';
         // all good so return the token
         return response()->json(compact('token', 'user'));
     }
