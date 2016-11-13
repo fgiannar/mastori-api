@@ -107,7 +107,7 @@ class EndUserController extends Controller
         // store
         $endUser = new EndUser;
         $user = new User;
-        $addresses = $data['addresses'];
+        $addresses = isset($data['addresses']) ? $data['addresses'] : [];
         $data = array_except($data, ['password_repeat', 'addresses']);
         $userdata = array_only($data, ['email', 'username', 'password']);
         $enduserdata = array_except($data, ['email', 'username', 'password']);
@@ -260,13 +260,13 @@ class EndUserController extends Controller
             'phone' => 'required|max:255',
             'password' => $password_required.'|max:255|min:6',
             'password_repeat' => $password_required.'|same:password|max:255',
-            'addresses' => 'required|array',
-            'addresses.*.lat' => 'required|numeric|between:-90,90',
-            'addresses.*.lng' => 'required|numeric|between:-180,180',
-            'addresses.*.address' => 'required|max:255',
+            'addresses' => 'sometimes|array',
+            'addresses.*.lat' => 'required_if:addresses|numeric|between:-90,90',
+            'addresses.*.lng' => 'required_if:addresses|numeric|between:-180,180',
+            'addresses.*.address' => 'required_if:addresses|max:255',
             'addresses.*.friendly_name' => 'max:255',
-            'addresses.*.city' => 'required|max:255',
-            'addresses.*.country' => 'required|max:255'
+            'addresses.*.city' => 'required_if:addresses|max:255',
+            'addresses.*.country' => 'required_if:addresses|max:255'
         ]);
     }
 }
