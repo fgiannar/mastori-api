@@ -261,12 +261,12 @@ class EndUserController extends Controller
             'password' => $password_required.'|max:255|min:6',
             'password_repeat' => $password_required.'|same:password|max:255',
             'addresses' => 'sometimes|array',
-            'addresses.*.lat' => 'required_if:addresses|numeric|between:-90,90',
-            'addresses.*.lng' => 'required_if:addresses|numeric|between:-180,180',
-            'addresses.*.address' => 'required_if:addresses|max:255',
+            'addresses.*.lat' => 'required_with:addresses|numeric|between:-90,90',
+            'addresses.*.lng' => 'required_with:addresses|numeric|between:-180,180',
+            'addresses.*.address' => 'required_with:addresses|max:255',
             'addresses.*.friendly_name' => 'max:255',
-            'addresses.*.city' => 'required_if:addresses|max:255',
-            'addresses.*.country' => 'required_if:addresses|max:255'
+            'addresses.*.city' => 'required_with:addresses|max:255',
+            'addresses.*.country' => 'required_with:addresses|max:255'
         ]);
     }
 }
