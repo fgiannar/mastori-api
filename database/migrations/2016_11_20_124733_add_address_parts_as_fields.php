@@ -14,7 +14,7 @@ class AddAddressPartsAsFields extends Migration
     {
       Schema::table('addresses', function (Blueprint $table) {
           $table->string('streetname');
-          $table->string('streenumber');
+          $table->string('streetnumber');
           $table->string('zipcode');
           $table->string('notes')->nullable();
       });
@@ -29,7 +29,7 @@ class AddAddressPartsAsFields extends Migration
     {
       Schema::table('addresses', function (Blueprint $table) {
           $table->dropColumn('streetname');
-          $table->dropColumn('streenumber');
+          $table->dropColumn('streetnumber');
           $table->dropColumn('zipcode');
           $table->dropColumn('notes')->nullable();
       });

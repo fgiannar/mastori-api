@@ -69,7 +69,7 @@ class Address extends Model {
    *
    * @var array
    */
-  protected $fillable = ['friendly_name', 'lat', 'lng', 'address', 'city', 'country', 'streetname', 'streenumber', 'zipcode', 'notes'];
+  protected $fillable = ['friendly_name', 'lat', 'lng', 'address', 'city', 'country', 'streetname', 'streetnumber', 'zipcode', 'notes'];
 
   /**
    * The attributes excluded from the model's JSON form.
