@@ -14,22 +14,14 @@ use Auth;
 use App\Http\Services\NexmoSmsService;
 use App\VerificationCode;
 
-
-
 class UsersController extends Controller
 {
   public function sendVerificationCode() {
     $user = Auth::user();
-    $verification['code'] =  strtoupper(str_random(5));
-    $verification['user_id'] = $user->id;
-    //expire in 10 minutes
-    $verification['expiration'] = date('Y-m-d H:i:s', time()+600);
-    $vObj = VerificationCode::create($verification);
-    if ($vObj) {
-      $phone = str_replace(['(', ')'], '', $user->userable->phone);
-    }
+    $vObj = VerificationCode::generate($user->id);
+    $phone = str_replace(['(', ')'], '', $user->userable->phone);  
     $smsService = new NexmoSmsService();
-    $sent = $smsService->send( $phone, 'mastori', 'Ο κωδικός επαλήθευσης είναι: ' . $verification['code']);
+    $sent = $smsService->send( $phone, 'mastori', 'Ο κωδικός επαλήθευσης είναι: ' . $vObj->code);
     if($sent) {
       return response()->json(['status' => 'ok'], 200);
     } else {

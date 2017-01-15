@@ -19,8 +19,9 @@
         "barryvdh/laravel-cors": "^0.8.0",
         "guzzlehttp/guzzle": "^6.1",
         "darkaonline/l5-swagger": "~3.0",
-        "prawnsalad/nexmo": "@dev",
-        "trexology/pointable": "^1.0"
+        "trexology/pointable": "^1.0",
+        "nexmo/client": "@beta",
+        "nexmo/laravel": "1.0.0-beta3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -31,8 +32,7 @@
     },
     "autoload": {
         "classmap": [
-            "database",
-            "vendor/prawnsalad/nexmo/src/"
+            "database"
         ],
         "psr-4": {
             "App\\": "app/"

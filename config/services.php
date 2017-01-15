@@ -43,10 +43,6 @@ return [
         'app_secret' =>  env('FACEBOOK_SECRET'),
         'v' => 20130815,
     ],
-    'nexmo' => [
-      'api_key' => '64f7c0f6',
-      'api_secret' => 'ccc2715d'
-    ],
     'points' => [
         'online_appointment' => 1000,
         'review' => 1000
