@@ -3,6 +3,9 @@
 namespace App\Http\Services;
 use Config;
 use App\SmsLog;
+use Log;
+use Nexmo\Laravel\Facade\Nexmo;
+
 
 /**
 *@to do add sms logging system
@@ -13,10 +16,9 @@ class NexmoSmsService
   private $nexmoMessage;
 
   public function __construct() {
-    //init Nexmo Client
-    $this->nexmoMessage =  new \NexmoMessage(Config::get('services.nexmo.api_key'), Config::get('services.nexmo.api_secret'));
-  }
 
+  }
+  
   /**
    * Uses Nexmo API to send sms to single receiver
    * Adds a log record to SmsLog table
@@ -29,27 +31,38 @@ class NexmoSmsService
   public function send($receiver, $sender, $text) {
       //format the phone number
       $receiver = $this->formatNumber($receiver, 'GR');
-      //send the message
-      $sent =  $this->nexmoMessage->sendText( $receiver, $sender, $text );
+
+      try {
+        $message =   Nexmo::message()->send([
+              'type' => 'unicode',
+              'to' => $receiver,
+              'from' => $sender,
+              'text' => $text
+            ]);
+          } catch(\Exception $e) {
+              $message = false;
+        };
+
       //add sms log record
       $smsLog = new SmsLog();
       $smsLog->receiver = $receiver;
-      if (isset($sent->messages) && is_array($sent->messages)) {
-        $msg = $sent->messages[0];
-        $smsLog->status = $msg->status;
+      $msgStatus = $message->getStatus();
+      if ($message) {
+        $msgStatus = $message->getStatus();
+        $smsLog->status = $msgStatus;
         //successfully sent
-        if ($msg->status == 0) {
-          $smsLog->messageid = $msg->messageid;
+        if ($msgStatus == 0) {
+          $smsLog->messageid = $message->getMessageId();
         } //error - msg has not been sent
          else {
-          $smsLog->errortext = $msg->errortext;
+          $smsLog->errortext = $message->getDeliveryError() . $message->getDeliveryLabel();
         }
       } else {
         //unexpected response format
         $smsLog->status = 'FAILED';
       }
       $smsLog->save();
-      return $sent->messages[0]->status == 0;
+      return $msgStatus == 0;
   }
 
 

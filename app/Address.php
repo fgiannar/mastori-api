@@ -69,7 +69,7 @@ class Address extends Model {
    *
    * @var array
    */
-  protected $fillable = ['friendly_name', 'lat', 'lng', 'address', 'city', 'country'];
+  protected $fillable = ['friendly_name', 'lat', 'lng', 'address', 'city', 'country', 'streetname', 'streetnumber', 'zipcode', 'notes', 'user_id'];
 
   /**
    * The attributes excluded from the model's JSON form.
@@ -101,5 +101,13 @@ class Address extends Model {
 
         return $query->whereRaw('ST_Distance(location,POINT('.$location.')) < '. $dist);
     }
+
+    /**
+      * Get the user of the address
+      */
+      public function user()
+      {
+        return $this->belongsTo('App\User', 'user_id');
+      }
 
 }

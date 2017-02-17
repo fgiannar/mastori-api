@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Validator;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Address;
 use App\EndUser;
 use App\User;
-
+use Illuminate\Support\Collection;
 use Auth;
 
 class EndUserController extends Controller
@@ -223,11 +222,30 @@ class EndUserController extends Controller
         $endUser->update($enduserdata);
         $endUser->user()->update($userdata);
 
-        // Insert related addresses
-        $endUser->user->addresses()->delete();
-        foreach ($addresses as $address) {
-            $endUser->user->addresses()->create($address);
+
+        // Insert - update - delete related addresses
+        $adressesSentCollection = collect($addresses);
+        $curentAddresses = $endUser->user->addresses;
+        foreach($curentAddresses as $existedAddress) {
+          //remove address that is missed from posted
+          $keepAddress= $adressesSentCollection->search(function ($item, $key) use($existedAddress){
+            if (!isset($item['id'])) { //keep new addresses
+              return false;
+            }
+            return ($item['id'] == $existedAddress->id);
+          });
+          if ($keepAddress === false) {
+            Address::destroy($existedAddress->id);
+          }
         }
+        //update changed address
+        foreach($adressesSentCollection as $updatedAddress) {
+          //add new
+          $updatedAddress['user_id'] = Auth::user()->id;
+          $aId = isset($updatedAddress['id']) && $updatedAddress['id'] > 0 ? $updatedAddress['id'] : 0;
+          Address::updateOrCreate(['id'=>$aId], $updatedAddress);
+        }
+        $endUser->user->load('addresses');
 
         return $endUser;
     }
