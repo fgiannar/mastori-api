@@ -129,7 +129,7 @@ class EndUser extends Model implements Pointable
     {
         $array = parent::toArray();
 
-        $array['points'] = $this->currentPoints();
+        // $array['points'] = $this->currentPoints();
 
         if (isset($array['user'])) {
           $array['username'] = $this->user->username;
