@@ -134,6 +134,7 @@ class AuthenticateController extends Controller
         }
         $user = Auth::user()->userable->load('user');;
         $user->type = Auth::user()->userable_type == 'App\EndUser' ? 'enduser' : 'mastori';
+        $user->mobile_verified = Auth::user()->mobile_verified;
         // all good so return the token
         return response()->json(compact('token', 'user'));
     }
