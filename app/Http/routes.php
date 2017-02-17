@@ -73,10 +73,6 @@ use Swagger\Annotations as SWG;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
