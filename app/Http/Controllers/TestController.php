@@ -15,16 +15,47 @@ use Config;
 
 use Mail;
 
+use SparkPost\SparkPost;
+use GuzzleHttp\Client;
+use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
+
+
 class TestController extends Controller
 {
 
     public function test()
     {
+
+      $httpClient = new GuzzleAdapter(new Client());
+$sparky = new SparkPost($httpClient, ['key'=>Config::get('services.sparkpost.api_key')]);
+
+$promise = $sparky->transmissions->post([
+    'content' => ['template_id' => 'test-template'],
+    // 'substitution_data' => ['name' => 'YOUR_FIRST_NAME'],
+    'recipients' => [
+        [
+            'address' => [
+                'name' => 'tania',
+                'email' => 'tania.pets@gmail.com',
+            ],
+        ],
+    ],
+]);
+try {
+    $response = $promise->wait();
+    echo $response->getStatusCode()."\n";
+    print_r($response->getBody())."\n";
+} catch (\Exception $e) {
+    echo $e->getCode()."\n";
+    echo $e->getMessage()."\n";
+}
+
+exit;
       $data = ['test' => 'test'];
       Mail::send('emails.demo', $data, function($message)
       {
-          
-          $message->to('tania.pets@gmail.com', 'Jane Doe')->subject('This is a demo!');
+
+          $message->from('postmaster@mastori.gr')->to('tania.pets@gmail.com', 'Jane Doe')->subject('This is a demo!');
       });
     //  $nexmo_sms = new \NexmoMessage('api_key', 'api_secret');
       // $smsService = new NexmoSmsService();

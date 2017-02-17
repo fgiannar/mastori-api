@@ -12,17 +12,19 @@
     ],
     "require": {
         "php": ">=5.6.4",
-        "laravel/framework": "5.4.*",
-        "graham-campbell/exceptions": "^9.0",
-        "tymon/jwt-auth": "0.5.*",
-        "heroicpixels/filterable": "dev-master",
         "barryvdh/laravel-cors": "^0.8.0",
-        "guzzlehttp/guzzle": "^6.1",
         "darkaonline/l5-swagger": "~4.0",
-        "prawnsalad/nexmo": "@dev",
-        "trexology/pointable": "^1.0",
+        "graham-campbell/exceptions": "^9.0",
+        "guzzlehttp/guzzle": "^6.1",
+        "heroicpixels/filterable": "dev-master",
+        "laravel/framework": "5.4.*",
         "nexmo/client": "@beta",
-        "nexmo/laravel": "1.0.0-beta3"
+        "nexmo/laravel": "1.0.0-beta3",
+        "php-http/guzzle6-adapter": "^1.1",
+        "prawnsalad/nexmo": "@dev",
+        "sparkpost/sparkpost": "^2.1",
+        "trexology/pointable": "^1.0",
+        "tymon/jwt-auth": "0.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

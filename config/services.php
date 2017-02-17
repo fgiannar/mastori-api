@@ -46,6 +46,9 @@ return [
     'points' => [
         'online_appointment' => 1000,
         'review' => 1000
+    ],
+    'sparkpost' => [
+      'api_key' => '1d0a7964bfb64d64acefe5ced029b4ed5c924a23'
     ]
 
 ];
