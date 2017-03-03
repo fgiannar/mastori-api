@@ -30,48 +30,23 @@ class TestController extends Controller
 
       $mService = new SparkPostEmailService();
 
-        // $mService->send('tania.pets@gmail.com', null, 'test-template', ['name'=>'Σουλτάνα', 'msg' => 'Είσαι βλάκας']);
 
+        $html = '<b>hii<br/>ouou';
+        $subject = 'Ωραίο μήνυμα';
+        $fromName = 'Σουλτάνα';
 
-        $mService->send('tania.pets@gmail.com', '<b>hii<br/>ouou', null, ['name'=>'Σουλτάνα', 'msg' => 'Είσαι βλάκας']);
+        $fromAddress = 'tania@mastori.gr';
 
+        // $sent = $mService->sendHtml('tania.pets@gmail.com', $html ,$subject, $fromAddress, $fromName);
+        //
+        //
+        // $sent = $mService->sendHtml('tania.pets@gmail.com', $html ,$subject);
+        //
 
-//       $httpClient = new GuzzleAdapter(new Client());
-// $sparky = new SparkPost($httpClient, ['key'=>Config::get('services.sparkpost.api_key')]);
-//
-// $promise = $sparky->transmissions->post([
-//     'content' => ['template_id' => 'test-template'],
-//     // 'substitution_data' => ['name' => 'YOUR_FIRST_NAME'],
-//     'recipients' => [
-//         [
-//             'address' => [
-//                 'name' => 'tania',
-//                 'email' => 'tania.pets@gmail.com',
-//             ],
-//         ],
-//     ],
-// ]);
-// try {
-//     $response = $promise->wait();
-//     echo $response->getStatusCode()."\n";
-//     print_r($response->getBody())."\n";
-// } catch (\Exception $e) {
-//     echo $e->getCode()."\n";
-//     echo $e->getMessage()."\n";
-// }
-//
-// exit;
-//       $data = ['test' => 'test'];
-//       Mail::send('emails.demo', $data, function($message)
-//       {
-//
-//           $message->from('postmaster@mastori.gr')->to('tania.pets@gmail.com', 'Jane Doe')->subject('This is a demo!');
-//       });
-//     //  $nexmo_sms = new \NexmoMessage('api_key', 'api_secret');
-//       // $smsService = new NexmoSmsService();
-//       // $sent = $smsService->send( '+306937078135', 'tania', 'σκατά ελληνικά και ψδωμά@δσδ' );
-//       // //$receive = $smsService->receive();
-//       // dd($sent);
+        // $sent = $mService->sendTemplate('tania.pets@gmail.com', 'test-template', ['name'=>'Σουλτάνα', 'msg' => 'Είσαι βλάκας']);
+
+        dd($sent);
+
     }
 
     public function testpoints()
