@@ -43,7 +43,7 @@ class TestController extends Controller
         // $sent = $mService->sendHtml('tania.pets@gmail.com', $html ,$subject);
         //
 
-        // $sent = $mService->sendTemplate('tania.pets@gmail.com', 'test-template', ['name'=>'Σουλτάνα', 'msg' => 'Είσαι βλάκας']);
+        $sent = $mService->sendTemplate('tania.pets@gmail.com', 'email-confirmation', ['name'=>'Σουλτάνα']);
 
         dd($sent);
 
