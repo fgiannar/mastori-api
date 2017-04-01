@@ -102,6 +102,9 @@ Route::group(['middleware' => ['api']], function () {
   // Ratings
   Route::get('ratings', 'RatingController@index');
 
+  //user's uniqness check per field - value
+  Route::get('users/unique',  'UsersController@unique' );
+
   Route::group(['middleware' => ['jwt.auth'/*, 'jwt.refresh'*/]], function() {
     Route::put('mastoria/{id}', ['middleware' => ['roles:mastori'], 'uses' => 'MastoriController@update']);
     // Users

@@ -19,7 +19,7 @@ class UsersController extends Controller
   public function sendVerificationCode() {
     $user = Auth::user();
     $vObj = VerificationCode::generate($user->id);
-    $phone = str_replace(['(', ')'], '', $user->userable->phone);  
+    $phone = str_replace(['(', ')'], '', $user->userable->phone);
     $smsService = new NexmoSmsService();
     $sent = $smsService->send( $phone, 'mastori', 'Ο κωδικός επαλήθευσης είναι: ' . $vObj->code);
     if($sent) {
@@ -48,6 +48,21 @@ class UsersController extends Controller
         $code->save();
         return response()->json(['status' => 'ok'], 200);
       }
+  }
+
+  /**
+   * Checks if user  with given field and value is unique
+   * @param Request $request
+   * @return Response
+   */
+  public function unique(Request $request) {
+    $params = $request->all();
+    if (!isset($params['field']) || !isset($params['value'])) {
+      $exists = false;
+    } else {
+      $exists = User::where($params['field'], '=', trim($params['value']))->first();
+    }
+    return response()->json(['status' => 'ok', 'result' => !$exists], 200);
   }
 
 }
