@@ -274,7 +274,7 @@ class EndUserController extends Controller
         return Validator::make($data, [
             'email' => 'required|max:255|unique:users,email,' . $user_id,
             'name' => 'required|max:255',
-            'photo' => 'image',
+            'photo' => 'nullable|image',
             'phone' => 'required|max:255',
             'password' => $password_required.'|max:255|min:6',
             'password_repeat' => $password_required.'|same:password|max:255',

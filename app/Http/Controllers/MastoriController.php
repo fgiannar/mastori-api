@@ -344,7 +344,7 @@ class MastoriController extends Controller
             'last_name' => 'required|max:255',
             'paratsoukli' => 'max:255',
             'pricelist' => 'required',
-            'photo' => 'image',
+            'photo' => 'nullable|image',
             'phone' => 'required|max:255',
             'password' => $password_required.'|max:255|min:6',
             'password_repeat' => $password_required.'|same:password|max:255',
