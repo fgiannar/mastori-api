@@ -60,7 +60,12 @@ class UsersController extends Controller
     if (!isset($params['field']) || !isset($params['value'])) {
       $exists = false;
     } else {
-      $exists = User::where($params['field'], '=', trim($params['value']))->first();
+      $user = User::where($params['field'], '=', trim($params['value']))->first();
+      if ($user) {
+        $exists = isset($params['user']) && $params['user'] == $user->userable->id ? false : true;
+      } else {
+        $exists = false;
+      }
     }
     return response()->json(['status' => 'ok', 'result' => !$exists], 200);
   }
