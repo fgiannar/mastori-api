@@ -59,7 +59,8 @@ class AppointmentController extends Controller
             'user_id'   => 'end_user_id',
             'mastori_id' => 'mastori_id',
             'status' => 'status',
-            'created_at' => 'created_at'
+            'created_at' => 'created_at',
+            'deadline' => 'deadline'
         ];
 
         $appointments = Appointment::filterColumns($filterColumns)->with('address');
