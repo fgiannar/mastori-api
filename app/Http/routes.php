@@ -93,6 +93,8 @@ Route::group(['middleware' => ['api']], function () {
   Route::post('auth', ['middleware' => ['guest'], 'uses' => 'Auth\AuthenticateController@authenticate']);
   // FB Auth
   Route::post('auth/facebook', ['uses' => 'Auth\AuthenticateController@facebook']);
+  // Reset password
+  Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
   // Professions
   Route::resource('professions', 'ProfessionController', ['only' => ['index']]);
     // Areas
