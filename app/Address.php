@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use App\Area;
+use Log;
 
 /**
 *     @SWG\Definition(
@@ -62,33 +64,37 @@ class Address extends Model {
    *
    * @var string
    */
-  protected $table = 'addresses';
+    protected $table = 'addresses';
 
   /**
    * The attributes that are mass assignable.
    *
    * @var array
    */
-  protected $fillable = ['friendly_name', 'lat', 'lng', 'address', 'city', 'country', 'streetname', 'streetnumber', 'zipcode', 'notes', 'user_id'];
+    protected $fillable = ['friendly_name', 'lat', 'lng', 'address', 'city', 'country', 'streetname', 'streetnumber', 'zipcode', 'notes', 'user_id', 'area_id'];
 
   /**
    * The attributes excluded from the model's JSON form.
    *
    * @var array
    */
-  protected $hidden = ['user_id', 'location', 'created_at', 'updated_at'];
+    protected $hidden = ['user_id', 'location', 'created_at', 'updated_at'];
 
   /**
-   * Override save method to add geolocation column
+   * Override save method to add geolocation and area_id column
    *
    */
-  public function save(array $options = array())
-  {
+    public function save(array $options = array())
+    {
 
-      $this->location = DB::raw("POINT($this->lat, $this->lng)");
+        $this->location = DB::raw("POINT($this->lat, $this->lng)");
 
-      parent::save($options);
-   }
+        $locationStr = $this->lng . ',' . $this->lat;
+        $locationArea = Area::getAreaFromLocation($locationStr);
+        $this->area_id = is_null($locationArea) ? null : $locationArea->id;
+
+        parent::save($options);
+    }
 
    /**
      * Scope a query to only include addresses in certain distance from a point
@@ -105,9 +111,9 @@ class Address extends Model {
     /**
       * Get the user of the address
       */
-      public function user()
-      {
+    public function user()
+    {
         return $this->belongsTo('App\User', 'user_id');
-      }
+    }
 
 }

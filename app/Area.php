@@ -106,9 +106,9 @@ class Area extends Model {
     }
 
     /**
-     * Get area from location (lat,lng)
+     * Get area from location (lng,lat)
      * if multiple areas contain the point, get the one with parent (the smaller area)
-     * @param  string, location in format "lat, lng", e.g "22.94924459999993,40.5915073"
+     * @param  string, location in format "lng, lat", e.g "22.94924459999993,40.5915073"
      * @return App\Area
      */
     public static function getAreaFromLocation($location) {
