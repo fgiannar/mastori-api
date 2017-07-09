@@ -132,7 +132,7 @@ class AuthenticateController extends Controller
             // something went wrong whilst attempting to encode the token
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
-        $user = Auth::user()->userable->load('user');;
+        $user = Auth::user()->userable->load('user');
         $user->type = Auth::user()->userable_type == 'App\EndUser' ? 'enduser' : 'mastori';
         $user->mobile_verified = Auth::user()->mobile_verified;
         // all good so return the token
