@@ -200,8 +200,6 @@ class Mastori extends Model implements Pointable
             unset($array['user']);
         }
 
-        $array['ratings_count'] = count($this->ratings);
-
         return $array;
     }
 

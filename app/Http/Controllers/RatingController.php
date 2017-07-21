@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Validator;
+use DB;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -58,13 +59,25 @@ class RatingController extends Controller
             'rating' => 'rating',
             'created_at' => 'created_at'
         ];
-        $ratings = Rating::with('mastori')->with('user')->filterColumns($filterColumns);
+        $ratings = Rating::filterColumns($filterColumns);
 
         if (Auth::guest() || Auth::user()->userable_type !== 'App\Admin') {
             $ratings = $ratings->approved();
         }
 
-        return $ratings->paginate($request->input('per_page'));
+        if ($request->has('statistics')) {
+          $rc = clone $ratings;
+          $statistics = $rc->groupBy('rating')->select('rating', DB::raw('count(*) as count'))->get();
+        }
+
+        $ratings = $ratings->with('mastori')->with('user')->paginate($request->input('per_page'));
+
+        if (isset($statistics)) {
+          $ratings = $ratings->toArray();
+          $ratings['statistics'] = $statistics;
+        }
+
+        return $ratings;
     }
 
 
