@@ -216,7 +216,13 @@ class MastoriController extends Controller
     public function show($id)
     {
         // TODO Add check if mastori is active if NOT admin
-        return Mastori::findOrFail($id)->load('user')->load('professions')->load('areas');
+        return Mastori::withCount(['ratings' => function ($query) {
+                $query->where('status', 'approved');
+            }])
+            ->findOrFail($id)
+            ->load('user')
+            ->load('professions')
+            ->load('areas');
     }
 
 
