@@ -88,7 +88,13 @@ class MastoriController extends Controller
             $mastoria = $mastoria->active();
         }
 
-        return $mastoria->with('user')->with('professions')->with('areas')->paginate($request->input('per_page'));
+        return $mastoria->withCount(['ratings' => function ($query) {
+                $query->where('status', 'approved');
+            }])
+            ->with('user')
+            ->with('professions')
+            ->with('areas')
+            ->paginate($request->input('per_page'));
     }
 
   /**
