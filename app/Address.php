@@ -89,8 +89,7 @@ class Address extends Model {
 
         $this->location = DB::raw("POINT($this->lat, $this->lng)");
 
-        $locationStr = $this->lng . ',' . $this->lat;
-        $locationArea = Area::getAreaFromLocation($locationStr);
+        $locationArea = Area::getAreaFromLocation($this->lng, $this->lat);
         $this->area_id = is_null($locationArea) ? null : $locationArea->id;
 
         parent::save($options);

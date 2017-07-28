@@ -108,11 +108,12 @@ class Area extends Model {
     /**
      * Get area from location (lng,lat)
      * if multiple areas contain the point, get the one with parent (the smaller area)
-     * @param  string, location in format "lng, lat", e.g "22.94924459999993,40.5915073"
+     * @param  float, lng eg 22.94924459999993
+     * @param  float, lat eg 40.5915073
      * @return App\Area
      */
-    public static function getAreaFromLocation($location) {
-      $query = Area::whereRaw("ST_CONTAINS(`polygon`, POINT($location))")->get();
+    public static function getAreaFromLocation($lng, $lat) {
+      $query = Area::whereRaw("ST_CONTAINS(`polygon`, POINT($lng,$lat))")->get();
       if($query->count() > 1) {
         $childAreas = $query->filter(function ($item) {
           return $item->parent_id!=null;

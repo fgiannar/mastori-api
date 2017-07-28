@@ -63,14 +63,14 @@ class MastoriController extends Controller
 
         $mastoria = Mastori::leftJoin('mastoria_professions', 'mastoria.id', '=', 'mastoria_professions.mastori_id');
 
-        if ($request->input('area') !== null || $request->input('userlocation') !==null ){
+        if ($request->has('area') || ( $request->has('lng') && $request->has('lng') )){
             $mastoria->leftJoin('mastoria_areas', 'mastoria.id', '=', 'mastoria_areas.mastori_id');
         }
 
         //when end user's lat,lng is provided, get mastoria that serve the location
         /*DOES NOT WORK WHEN AREA IS PROVIDED*/
-        if ($request->input('userlocation')){
-           $mastoria->UserLocation($request->input('userlocation'));
+        if ($request->input('lng') && $request->input('lat')){
+           $mastoria->userLocation($request->input('lng'), $request->input('lat'));
         }
 
         $mastoria->filterColumns($filterColumns)->groupBy('mastoria.id')->select('mastoria.*');

@@ -253,13 +253,17 @@ class Mastori extends Model implements Pointable
      * When user gives his location (e.g landing page), return only the mastoria that
      * serve the area where the location belongs
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param  string $location (lng, lat)
+     * @param  float $lng
+     * @param  float $lat
      * @return  \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeUserLocation($query, $location) {
-      $area  = Area::getAreaFromLocation($location);
-      $areaId = $area ? $area->id : 0;
-      return $query->where('mastoria_areas.area_id', '=', $areaId);
+    public function scopeUserLocation($query, $lng, $lat) {
+        $lng = (float) $lng;
+        $lat = (float) $lat;
+        $area  = Area::getAreaFromLocation($lng, $lat);
+        $areaId = $area ? $area->id : 0;
+
+        return $query->where('mastoria_areas.area_id', '=', $areaId);
     }
 
 }
