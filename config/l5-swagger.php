@@ -7,100 +7,83 @@ return [
         |--------------------------------------------------------------------------
         | Edit to set the api's title
         |--------------------------------------------------------------------------
-         */
-        'title' => 'Swagger UI',
-        /*
-        |--------------------------------------------------------------------------
-        | Edit to set the api's Auth token
-        |--------------------------------------------------------------------------
-         */
-        'auth_token' => env('L5_SWAGGER_API_AUTH_TOKEN', false),
-
-        /*
-        |--------------------------------------------------------------------------
-        | Edit to set the api key variable in interface
-        |--------------------------------------------------------------------------
-         */
-        'key_var' => env('L5_SWAGGER_API_KEY_VAR', 'api_key'),
-
-        /*
-        |--------------------------------------------------------------------------
-        | Edit to set the securityDefinition that is used in requests
-        |--------------------------------------------------------------------------
         */
-        'security_definition' => env('L5_SWAGGER_API_SECURITY_DEFINITION', 'api_key'),
 
-        /*
-        |--------------------------------------------------------------------------
-        | Edit to set where to inject api key (header, query)
-        |--------------------------------------------------------------------------
-         */
-        'key_inject' => env('L5_SWAGGER_API_KEY_INJECT', 'query'),
-
-        /*
-        |--------------------------------------------------------------------------
-        | Edit to set the api's version number
-        |--------------------------------------------------------------------------
-        */
-        'version' => env('L5_SWAGGER_API_VERSION', '1'),
-
-        /*
-        |--------------------------------------------------------------------------
-        | Edit to set the swagger version number
-        |--------------------------------------------------------------------------
-         */
-        'swagger_version' => env('L5_SWAGGER_DEFAULT_API_VERSION', '1'),
+        'title' => 'L5 Swagger UI',
     ],
 
     'routes' => [
+
         /*
         |--------------------------------------------------------------------------
         | Route for accessing api documentation interface
         |--------------------------------------------------------------------------
-         */
+        */
+
         'api' => 'api/documentation',
+
         /*
         |--------------------------------------------------------------------------
         | Route for accessing parsed swagger annotations.
         |--------------------------------------------------------------------------
-         */
+        */
+
         'docs' => 'docs',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Route for Oauth2 authentication callback.
+        |--------------------------------------------------------------------------
+        */
+
+        'oauth2_callback' => 'api/oauth2-callback',
+
+        /*
+        |--------------------------------------------------------------------------
+        | Middleware allows to prevent unexpected access to API documentation
+        |--------------------------------------------------------------------------
+         */
+        'middleware' => [
+            'api' => [],
+            'asset' => [],
+            'docs' => [],
+            'oauth2_callback' => [],
+        ],
+
     ],
 
     'paths' => [
+
         /*
         |--------------------------------------------------------------------------
         | Absolute path to location where parsed swagger annotations will be stored
         |--------------------------------------------------------------------------
-         */
+        */
+
         'docs' => storage_path('api-docs'),
+
+        /*
+        |--------------------------------------------------------------------------
+        | File name of the generated json documentation file
+        |--------------------------------------------------------------------------
+        */
+
+        'docs_json' => 'api-docs.json',
 
         /*
         |--------------------------------------------------------------------------
         | Absolute path to directory containing the swagger annotations are stored.
         |--------------------------------------------------------------------------
-         */
+        */
+
         'annotations' => base_path('app'),
-
-        /*
-        |--------------------------------------------------------------------------
-        | Absolute path to directory where to export assets
-        |--------------------------------------------------------------------------
-         */
-        'assets' => public_path('vendor/l5-swagger'),
-
-        /*
-        |--------------------------------------------------------------------------
-        | Path to assets public directory
-        |--------------------------------------------------------------------------
-         */
-        'assets_public' => '/vendor/l5-swagger',
 
         /*
         |--------------------------------------------------------------------------
         | Absolute path to directory where to export views
         |--------------------------------------------------------------------------
-         */
+        */
+
         'views' => base_path('resources/views/vendor/l5-swagger'),
 
         /*
@@ -108,65 +91,107 @@ return [
         | Edit to set the api's base path
         |--------------------------------------------------------------------------
         */
-        'base' => '',
+
+        'base' => env('L5_SWAGGER_BASE_PATH', null),
 
         /*
         |--------------------------------------------------------------------------
         | Absolute path to directories that you would like to exclude from swagger generation
         |--------------------------------------------------------------------------
-         */
+        */
+
         'excludes' => [],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | API security definitions. Will be generated into documentation file.
+    |--------------------------------------------------------------------------
+    */
+    'security' => [
+        /*
+        |--------------------------------------------------------------------------
+        | Examples of Security definitions
+        |--------------------------------------------------------------------------
+        */
+        /*
+        'api_key_security_example' => [ // Unique name of security
+            'type' => 'apiKey', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
+            'description' => 'A short description for security scheme',
+            'name' => 'api_key', // The name of the header or query parameter to be used.
+            'in' => 'header', // The location of the API key. Valid values are "query" or "header".
+        ],
+        'oauth2_security_example' => [ // Unique name of security
+            'type' => 'oauth2', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
+            'description' => 'A short description for oauth2 security scheme.',
+            'flow' => 'implicit', // The flow used by the OAuth2 security scheme. Valid values are "implicit", "password", "application" or "accessCode".
+            'authorizationUrl' => 'http://example.com/auth', // The authorization URL to be used for (implicit/accessCode)
+            //'tokenUrl' => 'http://example.com/auth' // The authorization URL to be used for (password/application/accessCode)
+            'scopes' => [
+                'read:projects' => 'read your projects',
+                'write:projects' => 'modify projects in your account',
+            ]
+        ],*/
     ],
 
     /*
     |--------------------------------------------------------------------------
     | Turn this off to remove swagger generation on production
     |--------------------------------------------------------------------------
-     */
+    */
+
     'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', false),
 
     /*
     |--------------------------------------------------------------------------
     | Edit to set the swagger version number
     |--------------------------------------------------------------------------
-     */
+    */
+
     'swagger_version' => env('SWAGGER_VERSION', '2.0'),
 
     /*
     |--------------------------------------------------------------------------
     | Edit to trust the proxy's ip address - needed for AWS Load Balancer
     |--------------------------------------------------------------------------
-     */
+    */
+
     'proxy' => false,
 
     /*
-     |--------------------------------------------------------------------------
-     | Uncomment to pass the validatorUrl parameter to SwaggerUi init on the JS
-     | side.  A null value here disables validation.  A string will override
-     | the default url.  If not specified, behavior is default and validation
-     | is enabled.
-     |--------------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | Configs plugin allows to fetch external configs instead of passing them to SwaggerUIBundle.
+    | See more at: https://github.com/swagger-api/swagger-ui#configs-plugin
+    |--------------------------------------------------------------------------
+    */
+
+    'additional_config_url' => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Apply a sort to the operation list of each API. It can be 'alpha' (sort by paths alphanumerically),
+    | 'method' (sort by HTTP method).
+    | Default is the order returned by the server unchanged.
+    |--------------------------------------------------------------------------
+    */
+
+    'operations_sort' => env('L5_SWAGGER_OPERATIONS_SORT', null),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Uncomment to pass the validatorUrl parameter to SwaggerUi init on the JS
+    | side.  A null value here disables validation.
+    |--------------------------------------------------------------------------
+    */
+
+    'validator_url' => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Uncomment to add constants which can be used in anotations
+    |--------------------------------------------------------------------------
      */
-    // 'validatorUrl' => null,
-
-    'headers' => [
-        /*
-        |--------------------------------------------------------------------------
-        | Uncomment to add response headers when swagger is generated
-        |--------------------------------------------------------------------------
-         */
-        /*"view" => [
-            'Content-Type' => 'text/plain'
-        ],*/
-
-        /*
-        |--------------------------------------------------------------------------
-        | Uncomment to add request headers when swagger performs requests
-        |--------------------------------------------------------------------------
-         */
-        /*"request" => [
-            'TestMe' => 'testValue'
-        ],*/
+    'constants' => [
+        'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://my-default-host.com'),
     ],
-
 ];
