@@ -17,7 +17,7 @@ class AreaController extends Controller
      *     description="Returns all the areas",
      *     operationId="getareas",
      *     tags={"areas"},
-     *     produces={"application/json"}
+     *     produces={"application/json"},
      *     @SWG\Response(
      *         response=200,
      *         description="All areas response",
