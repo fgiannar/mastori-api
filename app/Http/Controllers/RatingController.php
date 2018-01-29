@@ -27,13 +27,6 @@ class RatingController extends Controller
    *     operationId="getRatings",
    *     tags={"ratings"},
    *     produces={"application/json"},
-   *     @SWG\Parameter(
-   *         description="Access token",
-   *         in="header",
-   *         name="Authorization",
-   *         required=true,
-   *         type="string"
-   *     ),
    *     @SWG\Response(
    *         response=200,
    *         description="All ratings response",
@@ -41,13 +34,6 @@ class RatingController extends Controller
    *             type="array",
    *             @SWG\Items(ref="#/definitions/rating")
    *         ),
-   *     ),
-   *     @SWG\Response(
-   *         response="401",
-   *         description="token_not_provided/token_invalid",
-   *         @SWG\Schema(
-   *             ref="#/definitions/errorModel"
-   *         )
    *     )
    * )
    */

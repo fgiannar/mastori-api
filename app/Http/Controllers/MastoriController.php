@@ -24,13 +24,6 @@ class MastoriController extends Controller
    *     operationId="getMastoria",
    *     tags={"mastoria"},
    *     produces={"application/json"},
-   *     @SWG\Parameter(
-   *         description="Access token",
-   *         in="header",
-   *         name="Authorization",
-   *         required=true,
-   *         type="string"
-   *     ),
    *     @SWG\Response(
    *         response=200,
    *         description="All mastoria response",
@@ -38,13 +31,6 @@ class MastoriController extends Controller
    *             type="array",
    *             @SWG\Items(ref="#/definitions/mastori")
    *         ),
-   *     ),
-   *     @SWG\Response(
-   *         response="400",
-   *         description="token_not_provided",
-   *         @SWG\Schema(
-   *             ref="#/definitions/errorModel"
-   *         )
    *     )
    * )
    */
@@ -177,13 +163,6 @@ class MastoriController extends Controller
     *         required=true,
     *         type="integer"
     *     ),
-    *     @SWG\Parameter(
-    *         description="Access token",
-    *         in="header",
-    *         name="Authorization",
-    *         required=true,
-    *         type="string"
-    *     ),
     *     operationId="getmastori",
     *     tags={"mastoria"},
     *     description="Fetches a mastori",
@@ -197,13 +176,6 @@ class MastoriController extends Controller
     *         response="404",
     *         description="not found",
     *         @SWG\Schema(ref="#/definitions/errorModel")
-    *     ),
-    *     @SWG\Response(
-    *         response="400",
-    *         description="token_not_provided/token_invalid",
-    *         @SWG\Schema(
-    *             ref="#/definitions/errorModel"
-    *         )
     *     )
     * )
     */

@@ -26,13 +26,6 @@ class ProfessionController extends Controller
      *     operationId="getprofessions",
      *     tags={"professions"},
      *     produces={"application/json"},
-     *     @SWG\Parameter(
-     *         description="Access token",
-     *         in="header",
-     *         name="Authorization",
-     *         required=true,
-     *         type="string"
-     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="All professions response",
@@ -40,13 +33,6 @@ class ProfessionController extends Controller
      *             type="array",
      *             @SWG\Items(ref="#/definitions/profession")
      *         ),
-     *     ),
-     *     @SWG\Response(
-     *         response="401",
-     *         description="token_not_provided/token_invalid",
-     *         @SWG\Schema(
-     *             ref="#/definitions/errorModel"
-     *         )
      *     )
      * )
      */
