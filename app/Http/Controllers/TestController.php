@@ -22,11 +22,29 @@ use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 
 use App\Http\Services\SparkPostEmailService;
 
+use App\Http\Services\Email;
+
 class TestController extends Controller
 {
 
     public function test()
     {
+
+        $e = new Email('tania.pets@gmail.com', 'test-template', ['name' => 'Φιφή']);
+        $f = $e->send();
+        dd($f);
+
+        exit;
+
+        //Email
+        Mail::send('emails.demo', [], function ($message) {
+            $message
+              ->from('info@mastori.gr', 'Your Name')
+              ->to('tania.pets@gmail.com', 'Receiver Name')
+              ->subject('From SparkPost with ❤');
+          });
+
+        exit;
 
       $mService = new SparkPostEmailService();
 

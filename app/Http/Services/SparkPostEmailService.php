@@ -16,7 +16,7 @@ class SparkPostEmailService
 
   public function __construct() {
     $httpClient = new GuzzleAdapter(new Client());
-    $this->sparky = new SparkPost($httpClient, ['key'=>Config::get('services.sparkpost.api_key')]);
+    $this->sparky = new SparkPost($httpClient, ['key'=>Config::get('services.sparkpost.secret')]);
   }
 
 
