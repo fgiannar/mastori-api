@@ -314,4 +314,24 @@ class AuthenticateController extends Controller
 
         return $user->first();
     }
+
+
+    /**
+     * Email confirmation function
+     *
+     */
+    public function confirmEmail($token = '')
+    {
+        $user = Auth::user();
+        if ($user->mail_confirmed) {
+            return response()->json(['error' => 'already_confirmed'], 500);
+        }
+        if ($user->mail_token == $token) {
+            $user->confirmEmail();
+            return response()->json(['status' => 'ok']);
+        } else {
+            return response()->json(['error' => 'wrong_token'], 500);
+        }
+    }
+
 }

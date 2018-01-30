@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -48,6 +49,27 @@ class User extends Authenticatable
     public function addresses()
     {
       return $this->hasMany('App\Address');
+    }
+
+    /**
+     * User confirmed his email
+     * @return    void
+     */
+    public function confirmEmail()
+    {
+        $this->mail_confirmed = Carbon::now();
+        $this->mail_token = null;
+        $this->save();
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+        //add mail tokens, used to mail confirmation
+        static::creating(function ($user) {
+            $user->mail_token = str_random(30);
+        });
     }
 
 }

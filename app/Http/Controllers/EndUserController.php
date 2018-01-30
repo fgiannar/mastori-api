@@ -11,6 +11,7 @@ use App\EndUser;
 use App\User;
 use Illuminate\Support\Collection;
 use Auth;
+use App\Events\UserRegistered;
 
 class EndUserController extends Controller
 {
@@ -122,6 +123,10 @@ class EndUserController extends Controller
             $newUser->addresses()->create($address);
         }
         $newEndUser->user()->save($newUser);
+
+        //@todo make job for this
+        event(new UserRegistered($newUser));
+
 
         return response($newEndUser->load('user'), 201);
     }

@@ -114,6 +114,9 @@ Route::group(['middleware' => ['api']], function () {
     Route::get('users/sendverificationcode', 'UsersController@sendVerificationCode'); //sends sms with the code
     Route::get('users/verifycode', 'UsersController@verifyCode');//sends the code to system for verification
 
+    Route::get('auth/confirm-email/{token}', 'Auth\AuthenticateController@confirmEmail');
+
+
     Route::resource('users', 'EndUserController', ['only' => ['index', 'show']]);
     Route::put('users/{id}', ['middleware' => ['roles:enduser'], 'uses' => 'EndUserController@update']);
 
