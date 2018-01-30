@@ -46,8 +46,8 @@ class MastoriTableSeeder extends Seeder {
         DB::table('mastoria')->delete();
 
         factory(App\User::class, 'mastori', 500)->create()->each(function($u) {
-            $randProfessions = array_rand(App\Profession::all()->lists('id', 'id')->toArray(), 2);
-            $randAreas = array_rand(App\Area::all()->lists('id', 'id')->toArray(), 2);
+            $randProfessions = App\Profession::all()->pluck('id')->random(2)->toArray();
+            $randAreas = App\Area::all()->pluck('id')->random(2)->toArray();
             $u->userable->professions()->sync($randProfessions);
             $u->userable->areas()->sync($randAreas);
             $u->addresses()->save(factory(App\Address::class)->make());
